@@ -1,0 +1,53 @@
+const db = require("../database");
+const { DataTypes } = require("sequelize");
+const Cliente = require("./cliente.model");
+const Producto = require("./productos.model");
+
+const Venta = db.define("Venta", {
+  id: {
+    type: DataTypes.UUID,
+    primaryKey: true,
+    defaultValue: DataTypes.UUIDV4(),
+  },
+  monto: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    validate: {
+      isFloat: true,
+      min: 1,
+    },
+  },
+  tipoPago: {
+    type: DataTypes.ENUM(
+      "Efectivo",
+      "Tarjeta",
+      "Debito",
+      "Cuenta Corriente",
+      "Reserva"
+    ),
+    allowNull: false,
+    defaultValue: "Efectivo",
+  },
+  descuento: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+  },
+  recargo: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+  },
+  pagoEnEfectivo: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+  },
+});
+
+Venta.belongsTo(Cliente, {
+  onUpdate: "CASCADE",
+  onDelete: "CASCADE",
+});
+Cliente.hasMany(Venta);
+Venta.hasMany(Producto);
+Producto.belongsTo(Venta);
+
+module.exports = Venta;
