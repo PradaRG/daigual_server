@@ -52,6 +52,13 @@ const Producto = db.define("Producto", {
     validate: {
       min: 0,
     },
+    cantidad:{
+      type: DataTypes.INTEGER,
+    allowNull: true,
+    validate: {
+      min: 0,
+    },
+    },
   },
 
   
