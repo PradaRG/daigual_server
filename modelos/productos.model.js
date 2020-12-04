@@ -1,5 +1,6 @@
 const db = require("../database");
 const { DataTypes } = require("sequelize");
+const Proveedor = require("./proveedor.model");
 
 const Producto = db.define("Producto", {
   id: {
@@ -45,11 +46,25 @@ const Producto = db.define("Producto", {
       type: DataTypes.ENUM("BUENO", "DEFECTUOSO", "RESERVADO"),
       allowNull: false,
   },
+  precio:{// tiene que ir precio de lista y precio o eso lo hacemos en el frontend?
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    validate: {
+      min: 0,
+    },
+  },
 
   
 });
 
 //faltan foreing key de provedor y pedido
 //Producto.belongsTo(proveedor)
+Producto.belongsTo(Proveedor,
+  /* {
+  onUpdate: "CASCADE",
+  onDelete: "CASCADE",
+}
+esto creo que no va porque si borras un proveedor los productos tiennn que quedar */);
+Proveedor.hasMany(Producto);
 
 module.exports = Producto;
