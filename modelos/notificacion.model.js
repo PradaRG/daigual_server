@@ -32,4 +32,4 @@ Producto.hasMany(Notificacion);
 Notificacion.hasOne(Proveedor);
 Proveedor.belongsTo(Notificacion);//esto no entiendo :/ 
 
-module.exports = Pedido;
+module.exports = Notificacion;

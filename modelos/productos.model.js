@@ -65,13 +65,14 @@ const Producto = db.define("Producto", {
 });
 
 //faltan foreing key de provedor y pedido
-//Producto.belongsTo(proveedor)
+
 Producto.belongsTo(Proveedor,
-  /* {
+  {
   onUpdate: "CASCADE",
   onDelete: "CASCADE",
 }
-esto creo que no va porque si borras un proveedor los productos tiennn que quedar */);
+
+ );
 Proveedor.hasMany(Producto);
 
 module.exports = Producto;

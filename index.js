@@ -13,7 +13,7 @@ const CuentaCorriente = require('./modelos/cuentacorriente.model');
 const Notificacion = require('./modelos/notificacion.model');
 const Pedido = require('./modelos/pedido.model');
 const Reserva = require('./modelos/reserva.model');
-const Usuario = require('./modelos/Usuario.model');
+const Usuario = require('./modelos/usuarios.model');
 
 if (process.env.ENVIRONMENT === "dev") {
   db.sync({ force: true });
