@@ -1,0 +1,6 @@
+PUERTO=3000
+DBNAME=inventario
+USER=cliente
+DB_PASSWORD=sanbenito123
+DB_TYPE= postgres
+NODE_ENV=dev
