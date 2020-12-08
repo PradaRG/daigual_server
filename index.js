@@ -7,6 +7,13 @@ const db = require("./database");
 const Producto = require("./modelos/productos.model");
 const Proveedor = require("./modelos/proveedor.model");
 const Venta = require('./modelos/venta.model');
+const Cliente = require('./modelos/cliente.model');
+const Caja = require('./modelos/caja.model');
+const CuentaCorriente = require('./modelos/cuentacorriente.model');
+const Notificacion = require('./modelos/notificacion.model');
+const Pedido = require('./modelos/pedido.model');
+const Reserva = require('./modelos/reserva.model');
+const Usuario = require('./modelos/Usuario.model');
 
 if (process.env.ENVIRONMENT === "dev") {
   db.sync({ force: true });

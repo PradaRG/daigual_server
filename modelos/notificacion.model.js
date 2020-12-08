@@ -16,6 +16,11 @@ const Notificacion = db.define("Notificacion", {
     validate: {
       min: 0,
     },
+    // NECESITA UNA DESCRIPCION
+    descripcion: {
+      type: DataTypes.STRING(200),
+      allowNull: true,
+    },
   },
 });
 
