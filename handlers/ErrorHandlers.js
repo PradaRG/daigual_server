@@ -3,7 +3,7 @@ const logger = require("../helpers/createLogger");
 const { v4 } = require("uuid");
 
 async function defaultRoute(req, res, next) {
-  next(createError.NotFound("Not found"));
+  next(createError.NotFound("Direccion no encontrada"));
 }
 
 async function errorHandler(err, req, res, next) {

@@ -1,30 +1,43 @@
-const {DataTypes} = require('sequelize');
-const db = require('../database');
+const { DataTypes } = require("sequelize");
+const db = require("../database");
+const bcrypt = require('bcrypt');
 
-const Usuario = db.define('Usuario', {
-id: {
-    type: DataTypes.UUID,
-    primaryKey: true,
-    defaultValue: DataTypes.UUIDV4()
-},
-nombre: {
-    type: DataTypes.STRING,
-    allowNull: false
-},
-password: {
-    type: DataTypes.STRING(64),
-    allowNull: false,
-},
-tipoUsuario: {
-    type: DataTypes.ENUM('MASTER', 'ADMIN', 'VENDEDOR'),
-    allowNull: false
-},
-ventaRapida: {
-    type: DataTypes.INTEGER.UNSIGNED(3).ZEROFILL,
-    unique: true,
-    allowNull: false
-}
-});
+const Usuario = db.define(
+  "Usuario",
+  {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4(),
+    },
+    nombre: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING(64),
+      allowNull: false,
+    },
+    tipoUsuario: {
+      type: DataTypes.ENUM("MASTER", "ADMIN", "VENDEDOR"),
+      allowNull: false,
+    },
+    ventaRapida: {
+      type: DataTypes.INTEGER(3).UNSIGNED.ZEROFILL,
+      unique: true,
+      allowNull: false,
+    },
+  },
+  {
+    hooks: {
+      async afterCreate(user) {
+        const hash = await bcrypt.hashSync(user.password, 10);
+        user.password = hash;
+      },
+    },
+  }
+);
 
 //PERMISOS:
 //MASTER: Full + cambiar permisos

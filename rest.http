@@ -1,8 +1,11 @@
 
 ### Ruta inicial
-GET  http://localhost:3000
+POST  http://localhost:3000/usuarios/register
 Content-Type: application/json
 
 {
-    "mensaje": "Hello toto"
+    "nombre": "Titox",
+    "password": "test1234",
+    "tipoUsuario": "ADMIN",
+    "ventaRapida": 123
 }

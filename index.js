@@ -2,6 +2,7 @@ require("dotenv").config();
 const Express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const userRouter = require("./handlers/User.route");
 const { defaultRoute, errorHandler } = require("./handlers/ErrorHandlers");
 
 const db = require("./database");
@@ -25,6 +26,8 @@ servidor.get("/", async (req, res) => {
   console.log(mensaje);
   res.sendStatus(200);
 });
+
+servidor.use("/usuarios", userRouter);
 
 servidor.use(defaultRoute);
 servidor.use(errorHandler);
