@@ -38,7 +38,7 @@ CuentaCorriente.belongsTo(Cliente, {
   onDelete: "CASCADE",
 });
 Cliente.hasOne(CuentaCorriente)
-CuentaCorriente.hasMany(Venta);
-Venta.belongsTo(CuentaCorriente);
+
+
 
 module.exports = CuentaCorriente;

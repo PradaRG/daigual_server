@@ -15,7 +15,7 @@ const Pedido = require('./modelos/pedido.model');
 const Reserva = require('./modelos/reserva.model');
 const Usuario = require('./modelos/usuarios.model');
 
-if (process.env.ENVIRONMENT === "dev") {
+if (process.env.NODE_ENV === "dev") {
   db.sync({ force: true });
 }
 

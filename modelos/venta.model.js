@@ -48,6 +48,6 @@ Venta.belongsTo(Cliente, {
 });
 Cliente.hasMany(Venta);
 Venta.hasMany(Producto);
-Producto.belongsTo(Venta);
+Producto.belongsToMany(Venta);
 
 module.exports = Venta;
