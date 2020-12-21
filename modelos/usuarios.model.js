@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const db = require("../database");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 const Usuario = db.define(
   "Usuario",
@@ -24,20 +24,28 @@ const Usuario = db.define(
       allowNull: false,
     },
     ventaRapida: {
-      type: DataTypes.INTEGER(3).UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER,
       unique: true,
       allowNull: false,
     },
   },
   {
     hooks: {
-      async afterCreate(user) {
-        const hash = await bcrypt.hashSync(user.password, 10);
+      beforeCreate: async (user) => {
+        const hash = await bcrypt.hash(user.password, 10);
         user.password = hash;
       },
     },
   }
 );
+
+Usuario.prototype.comparePassword = async function (password) {
+  try {
+    return await bcrypt.compare(password, this.password);
+  } catch (error) {
+    throw error;
+  }
+};
 
 //PERMISOS:
 //MASTER: Full + cambiar permisos

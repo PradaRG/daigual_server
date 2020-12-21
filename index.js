@@ -10,6 +10,7 @@ const Producto = require("./modelos/productos.model");
 const Proveedor = require("./modelos/proveedor.model");
 const Venta = require("./modelos/venta.model");
 const { defaultMeta } = require("./helpers/createLogger");
+const { verifyAccessToken } = require('./helpers/jwt_helper');
 
 if (process.env.NODE_ENV === "dev") {
   db.sync({ force: true });
@@ -25,6 +26,10 @@ servidor.get("/", async (req, res) => {
   const { mensaje } = req.body;
   console.log(mensaje);
   res.sendStatus(200);
+});
+
+servidor.get('/', verifyAccessToken, (req, res, next) =>{
+res.send('hello world');
 });
 
 servidor.use("/usuarios", userRouter);
