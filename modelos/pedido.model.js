@@ -19,12 +19,9 @@ const Pedido = db.define("Pedido", {
   },
 });
 
-Pedido.belongsTo(Proveedor, {
-  onUpdate: "CASCADE",
-  onDelete: "CASCADE",
-});
+Pedido.hasOne(Proveedor);
 Proveedor.hasMany(Pedido);
 Pedido.hasMany(Producto);
-Producto.belongsTo(Pedido);
+Producto.belongsToMany(Pedido);
 
 module.exports = Pedido;

@@ -2,7 +2,7 @@ const db = require("../database");
 const { DataTypes } = require("sequelize");
 const Cliente = require("./cliente.model");
 const Producto = require("./productos.model");
-
+const Usuario = require("./usuarios.model")
 const Venta = db.define("Venta", {
   id: {
     type: DataTypes.UUID,
@@ -49,5 +49,7 @@ Venta.belongsTo(Cliente, {
 Cliente.hasMany(Venta);
 Venta.hasMany(Producto);
 Producto.belongsToMany(Venta);
+Venta.hasOne(Usuario)
+Usuario.hasMany(Venta)
 
 module.exports = Venta;

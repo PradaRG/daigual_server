@@ -3,6 +3,9 @@ const { DataTypes } = require("sequelize");
 const Cliente = require("./cliente.model");
 const Venta = require("./productos.model");
 
+// pensar reserva estado de venta si se vendio o no al momento del cierre 
+// notificacion  pagado 
+
 const Reserva = db.define("Reserva", {
   id: {
     type: DataTypes.UUID,

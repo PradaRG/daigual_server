@@ -24,12 +24,6 @@ const Notificacion = db.define("Notificacion", {
   },
 });
 
-Notificacion.belongsTo(Producto, {
-  onUpdate: "CASCADE",
-  onDelete: "CASCADE",
-});
-Producto.hasMany(Notificacion);
-Notificacion.hasOne(Proveedor);
-Proveedor.belongsTo(Notificacion);//esto no entiendo :/ 
+//agregar foreing key  producto
 
 module.exports = Notificacion;
