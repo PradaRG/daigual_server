@@ -20,7 +20,7 @@ tipoUsuario: {
     allowNull: false
 },
 ventaRapida: {
-    type: DataTypes.INTEGER.UNSIGNED(3).ZEROFILL,
+    type: DataTypes.INTEGER,
     unique: true,
     allowNull: false
 }

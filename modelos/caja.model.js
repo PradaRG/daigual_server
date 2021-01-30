@@ -1,6 +1,6 @@
 const db = require("../database");
 const { DataTypes } = require("sequelize");
-const Venta = require("./Venta.model");
+const Venta = require("../modelos/venta.model");
 
 const Caja = db.define("Caja", {
   id: {

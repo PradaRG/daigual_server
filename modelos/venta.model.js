@@ -48,7 +48,7 @@ Venta.belongsTo(Cliente, {
 });
 Cliente.hasMany(Venta);
 Venta.hasMany(Producto);
-Producto.belongsToMany(Venta);
+Producto.belongsToMany(Venta, {through: 'VentasDeProductos'});
 Venta.hasOne(Usuario)
 Usuario.hasMany(Venta)
 

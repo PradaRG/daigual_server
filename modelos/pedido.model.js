@@ -20,8 +20,8 @@ const Pedido = db.define("Pedido", {
 });
 
 Pedido.hasOne(Proveedor);
-Proveedor.hasMany(Pedido);
+//Proveedor.hasMany(Pedido);
 Pedido.hasMany(Producto);
-Producto.belongsToMany(Pedido);
+Producto.belongsToMany(Pedido, {through: 'PedidosdeProducto'});
 
 module.exports = Pedido;

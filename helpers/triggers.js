@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     hooks: {
     /*a esto no lo esta llamando*/
-    afterCreate: function(producto,option){
+    afterUpdate: function(instance,options){
         models.Config.create({
             productoid: producto.id
         })
