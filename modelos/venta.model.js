@@ -47,9 +47,11 @@ Venta.belongsTo(Cliente, {
   onDelete: "CASCADE",
 });
 Cliente.hasMany(Venta);
-Venta.hasMany(Producto);
+//Venta.hasMany(Producto);
 Producto.belongsToMany(Venta, {through: 'VentasDeProductos'});
 Venta.hasOne(Usuario)
-Usuario.hasMany(Venta)
+//Usuario.hasMany(Venta)
+
+
 
 module.exports = Venta;
