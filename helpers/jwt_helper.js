@@ -54,7 +54,7 @@ module.exports = {
           }
         );
         return resolve(token);
-      });455555555555555555555555555555rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrd
+      });
     });
   },
   verifyRefreshToken: (refreshToken) => {

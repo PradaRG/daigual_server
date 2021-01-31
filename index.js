@@ -9,7 +9,7 @@ const db = require("./database");
 const Producto = require("./modelos/productos.model");
 const Proveedor = require("./modelos/proveedor.model");
 const Venta = require("./modelos/venta.model");
-const { defaultMeta } = require("./helpers/createLogger");
+
 const { verifyAccessToken } = require('./helpers/jwt_helper');
 
 if (process.env.NODE_ENV === "dev") {
