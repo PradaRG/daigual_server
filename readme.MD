@@ -3,6 +3,7 @@
 ### SETUP:
 
 - Instalar [**Redis**](https://redislabs.com/blog/redis-on-windows-10/).
+- Iniciar Redis via terminal utilizando el comando redis-server.
 - Clonar el repositorio.  
 - Abrir la carpeta del proyecto desde la consola.
     - Ejecutar el comando npm `install`.
