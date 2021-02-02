@@ -2,16 +2,11 @@ const Express = require("express");
 const router = Express.Router();
 const createError = require("http-errors");
 const Usuario = require("../modelos/usuarios.model");
-const {
-  signAccessToken,
-  signRefreshToken,
-  verifyRefreshToken,
-} = require("../helpers/jwt_helper");
-const {
-  userRegistrationSchema,
-  userLoginSchema,
-} = require("../helpers/ValidationSchema");
+const { signAccessToken, signRefreshToken, verifyRefreshToken } = require("../helpers/jwt_helper");
+const { userRegistrationSchema, userLoginSchema } = require("../helpers/ValidationSchema");
 const logger = require("../helpers/createLogger");
+const { create } = require("../modelos/usuarios.model");
+const cliente = require("../helpers/init_redis");
 
 // Manejo de las rutas de usuarios
 
@@ -36,6 +31,7 @@ router.post("/register", async (req, res, next) => {
       logger.log({
         level: "info",
         user: createdUser,
+        message: "user Created"
       });
 
       res.sendStatus(201);
@@ -60,15 +56,27 @@ router.post("/login", async (req, res, next) => {
 
     const accessToken = await signAccessToken(user.id);
     const refreshToken = await signRefreshToken(user.id);
-
+    logger.log({
+      level: "info",
+      user: user,
+      message: "Ingreso al sistema"
+    });
     res.status(200).json({ accessToken, refreshToken });
   } catch (error) {
     next(error);
   }
 });
 
-router.post("/logout", async (req, res, next) => {
+router.delete("/logout", async (req, res, next) => {
   try {
+    const { refreshToken } = req.body;
+    if (!refreshToken) throw createError.BadRequest();
+    const userId = await verifyRefreshToken(refreshToken);
+    cliente.DEL(userId, (err, value) => {
+      if (err) throw createError.InternalServerError();
+      logger.log({  level: "info",  user: userId,  message: "Salio del sistema"});
+      res.sendStatus(204);
+    });
   } catch (error) {
     next(error);
   }
