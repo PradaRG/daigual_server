@@ -1,8 +1,32 @@
 
-### Ruta inicial
-GET  http://localhost:3000
+### Registrar un usuario
+POST  http://localhost:3000/usuarios/register
 Content-Type: application/json
 
 {
-    "mensaje": "Hello toto"
+    "nombre": "Titox",
+    "password": "test1234",
+    "tipoUsuario": "ADMIN",
+    "ventaRapida": 123
 }
+
+### Loguear un usuario
+POST  http://localhost:3000/usuarios/login
+Content-Type: application/json
+
+{
+    "nombre": "Titox",
+    "password": "test1234"
+}
+
+### Refresh token route
+POST http://localhost:3000/usuarios/refresh-token
+Content-Type: application/json
+
+{
+    "refreshToken": ""
+}
+
+### Send authorized request
+GET  http://localhost:3000/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDc5MjI0MTgsImV4cCI6MTYwNzkyMjQyOCwiYXVkIjoiYzM3M2M1NzUtZTM3YS00NWEzLTgyOGEtZGUxNWVjYjBjZmI0IiwiaXNzIjoicnRkZXZlbG9wbWVudC5jb20uYXIifQ.1hIQso_5M5Q0MPkT7AtkAOvu7a2N2hGHcviXglCm1js
