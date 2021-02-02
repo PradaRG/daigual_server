@@ -25,10 +25,14 @@
     "express": "^4.17.1",
     "helmet": "^4.2.0",
     "http-errors": "^1.8.0",
+    "joi": "^17.3.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
-    "sequelize": "^6.3.5"
+    "redis": "^3.0.2",
+    "sequelize": "^6.3.5",
+    "uuid": "^8.3.1",
+    "winston": "^3.3.3"
   }
 }
