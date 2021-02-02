@@ -1,6 +1,6 @@
 const db = require("../database");
 const { DataTypes } = require("sequelize");
-const Producto = require("./productos.model");
+
 
 const Proveedor = db.define("Proveedor", {
   id: {
@@ -39,7 +39,6 @@ const Proveedor = db.define("Proveedor", {
   },
 });
 
-Proveedor.hasMany(Producto);
-Producto.belongsTo(Proveedor);
+
 
 module.exports = Proveedor;

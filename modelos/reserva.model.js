@@ -1,9 +1,12 @@
 const db = require("../database");
 const { DataTypes } = require("sequelize");
 const Cliente = require("./cliente.model");
-const Producto = require("./productos.model");
-const Usuario = require("./usuarios.model")
-const Venta = db.define("Venta", {
+const Venta = require("./productos.model");
+
+// pensar reserva estado de venta si se vendio o no al momento del cierre 
+// notificacion  pagado 
+
+const Reserva = db.define("Reserva", {
   id: {
     type: DataTypes.UUID,
     primaryKey: true,
@@ -17,22 +20,12 @@ const Venta = db.define("Venta", {
       min: 1,
     },
   },
-  tipoPago: {
-    type: DataTypes.ENUM(
-      "Efectivo",
-      "Tarjeta",
-      "Debito",
-      "Cuenta Corriente",
-      "Reserva"
-    ),
-    allowNull: false,
-    defaultValue: "Efectivo",
-  },
+  
   descuento: {
     type: DataTypes.FLOAT,
     allowNull: true,
   },
-  recargo: {
+  recargo: {// porsi quiere agregar un recargo cada tanto
     type: DataTypes.FLOAT,
     allowNull: true,
   },
@@ -40,18 +33,15 @@ const Venta = db.define("Venta", {
     type: DataTypes.FLOAT,
     allowNull: true,
   },
+
 });
 
-Venta.belongsTo(Cliente, {
+Reserva.belongsTo(Cliente, {
   onUpdate: "CASCADE",
   onDelete: "CASCADE",
 });
-Cliente.hasMany(Venta);
-//Venta.hasMany(Producto);
-Producto.belongsToMany(Venta, {through: 'VentasDeProductos'});
-Venta.hasOne(Usuario)
-//Usuario.hasMany(Venta)
+Cliente.hasMany(Reserva)
+Reserva.hasOne(Venta);
+Venta.belongsTo(Reserva);
 
-
-
-module.exports = Venta;
+module.exports = Reserva;
