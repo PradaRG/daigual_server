@@ -2,6 +2,7 @@ require("dotenv").config();
 const Express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const cors = require('cors');
 const userRouter = require("./handlers/User.route");
 const { defaultRoute, errorHandler } = require("./handlers/ErrorHandlers");
 const db = require("./database");
@@ -27,6 +28,7 @@ const servidor = Express();
 servidor.use(helmet());
 servidor.use(morgan("dev"));
 servidor.use(Express.json());
+servidor.use(cors());
 
 servidor.get("/", async (req, res) => {
   const { mensaje } = req.body;

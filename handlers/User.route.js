@@ -25,7 +25,7 @@ router.post("/register", async (req, res, next) => {
       const createdUser = await Usuario.create({
         nombre: result.nombre,
         password: result.password,
-        tipoUsuario: result.tipoUsuario,
+        permisos: result.permisos,
         ventaRapida: result.ventaRapida,
       });
       logger.log({
@@ -43,17 +43,18 @@ router.post("/register", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   try {
+    console.log(req.body);
     const result = await userLoginSchema.validateAsync(req.body);
-
+    console.log(result);
     const user = await Usuario.findOne({ where: { nombre: result.nombre } });
 
     if (!user) throw createError.NotFound("Usuario no registrado");
 
     const isMatch = await user.comparePassword(result.password);
 
-    if (!isMatch)
+    if (!isMatch) {
       throw createError.Unauthorized("Nombre/Contraseña incorrecta");
-
+    }
     const accessToken = await signAccessToken(user.id);
     const refreshToken = await signRefreshToken(user.id);
     logger.log({
@@ -61,7 +62,7 @@ router.post("/login", async (req, res, next) => {
       user: user,
       message: "Ingreso al sistema"
     });
-    res.status(200).json({ accessToken, refreshToken });
+    res.status(200).json({ nombre: user.nombre, permisos: user.permisos, accessToken, refreshToken });
   } catch (error) {
     next(error);
   }
@@ -74,7 +75,7 @@ router.delete("/logout", async (req, res, next) => {
     const userId = await verifyRefreshToken(refreshToken);
     cliente.DEL(userId, (err, value) => {
       if (err) throw createError.InternalServerError();
-      logger.log({  level: "info",  user: userId,  message: "Salio del sistema"});
+      logger.log({ level: "info", user: userId, message: "Salio del sistema" });
       res.sendStatus(204);
     });
   } catch (error) {
