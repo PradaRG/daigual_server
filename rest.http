@@ -1,17 +1,17 @@
 
 ### Registrar un usuario
-POST  http://localhost:3000/usuarios/register
+POST  http://localhost:3004/usuarios/register
 Content-Type: application/json
 
 {
     "nombre": "Titox",
     "password": "test1234",
-    "tipoUsuario": "ADMIN",
+    "permisos": "MASTER",
     "ventaRapida": 123
 }
 
 ### Loguear un usuario
-POST  http://localhost:3000/usuarios/login
+POST  http://localhost:3004/usuarios/login
 Content-Type: application/json
 
 {
@@ -20,7 +20,7 @@ Content-Type: application/json
 }
 
 ### Refresh token route
-POST http://localhost:3000/usuarios/refresh-token
+POST http://localhost:3004/usuarios/refresh-token
 Content-Type: application/json
 
 {
@@ -28,5 +28,5 @@ Content-Type: application/json
 }
 
 ### Send authorized request
-GET  http://localhost:3000/
+GET  http://localhost:3004/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDc5MjI0MTgsImV4cCI6MTYwNzkyMjQyOCwiYXVkIjoiYzM3M2M1NzUtZTM3YS00NWEzLTgyOGEtZGUxNWVjYjBjZmI0IiwiaXNzIjoicnRkZXZlbG9wbWVudC5jb20uYXIifQ.1hIQso_5M5Q0MPkT7AtkAOvu7a2N2hGHcviXglCm1js

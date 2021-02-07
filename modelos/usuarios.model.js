@@ -19,7 +19,7 @@ const Usuario = db.define(
       type: DataTypes.STRING(64),
       allowNull: false,
     },
-    tipoUsuario: {
+    permisos: {
       type: DataTypes.ENUM("MASTER", "ADMIN", "VENDEDOR"),
       allowNull: false,
     },
