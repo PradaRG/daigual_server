@@ -2,12 +2,12 @@ const express = require('express');
 const createError = require('http-errors');
 const router = express.Router();
 const Proveedor = require('../modelos/proveedor.model');
+const Producto = require('../modelos/productos.model');
 
 
-router.post('/getall', (req, res) => {
-    const items = Items.findAll();
-
-    res.status(200).json(items);
+router.get('/getall', async (req, res) => {
+    const producto = await Producto.findAll();
+    res.status(200).json(producto);
 });
 
 router.post('/create', async (req, res, next) => {

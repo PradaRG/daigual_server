@@ -62,5 +62,8 @@ Content-Type: application/json
     "estado": "BUENO",
     "precio": "100",
     "cantidad": "12",
-    "proveedorId": "4127ba1d-77a6-4dc5-831e-c852708378f3"
+    "proveedorId": "c8ff5e6a-7cfb-4457-b53f-f7f450b5d5a0"
 }
+
+### Get All
+GET http://localhost:3004/productos/getall
