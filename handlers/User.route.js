@@ -5,7 +5,6 @@ const Usuario = require("../modelos/usuarios.model");
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = require("../helpers/jwt_helper");
 const { userRegistrationSchema, userLoginSchema } = require("../helpers/ValidationSchema");
 const logger = require("../helpers/createLogger");
-const { create } = require("../modelos/usuarios.model");
 const cliente = require("../helpers/init_redis");
 
 // Manejo de las rutas de usuarios

@@ -4,6 +4,8 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const cors = require('cors');
 const userRouter = require("./handlers/User.route");
+const productRouter = require("./handlers/Items.route");
+const proveedorRouter = require("./handlers/Proveedor.route");
 const { defaultRoute, errorHandler } = require("./handlers/ErrorHandlers");
 const db = require("./database");
 
@@ -30,17 +32,9 @@ servidor.use(morgan("dev"));
 servidor.use(Express.json());
 servidor.use(cors());
 
-servidor.get("/", async (req, res) => {
-  const { mensaje } = req.body;
-  console.log(mensaje);
-  res.sendStatus(200);
-});
-
-servidor.get('/', verifyAccessToken, (req, res, next) =>{
-res.send('hello world');
-});
-
 servidor.use("/usuarios", userRouter);
+servidor.use('/proveedores', proveedorRouter);
+servidor.use('/productos',productRouter);
 
 servidor.use(defaultRoute);
 servidor.use(errorHandler);

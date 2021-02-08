@@ -6,7 +6,7 @@ Content-Type: application/json
 {
     "nombre": "Titox",
     "password": "test1234",
-    "permisos": "MASTER",
+    "permisos": "VENDEDOR",
     "ventaRapida": 123
 }
 
@@ -30,3 +30,37 @@ Content-Type: application/json
 ### Send authorized request
 GET  http://localhost:3004/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDc5MjI0MTgsImV4cCI6MTYwNzkyMjQyOCwiYXVkIjoiYzM3M2M1NzUtZTM3YS00NWEzLTgyOGEtZGUxNWVjYjBjZmI0IiwiaXNzIjoicnRkZXZlbG9wbWVudC5jb20uYXIifQ.1hIQso_5M5Q0MPkT7AtkAOvu7a2N2hGHcviXglCm1js
+
+### Crear Proveedor
+POST http://localhost:3004/proveedores/create
+Content-Type: application/json
+
+{
+   "codigoInterno": "es",
+    "nombre": "El sembrador SRL",
+    "email": "sembrame@esta.com",
+    "telefono": "343-1234565",
+    "descripcion": "Vendemos alcohol para emborrachar a tu suegra" 
+}
+
+### Crear data falsa
+GET http://localhost:3004/proveedores/bulk 
+
+### Crear Producto
+POST http://localhost:3004/productos/create
+Content-Type: application/json
+
+{ 
+    "codigoInterno": "acerstan",
+    "codigoPaquete": "asdfug12uf1",
+    "ubicacion": "PROVEEDOR",
+    "nombre": "Termo",
+    "marca": "Stanley",
+    "descripcion": "Termo de acero",
+    "alertaMin": "3",
+    "alertaMax": "5",
+    "estado": "BUENO",
+    "precio": "100",
+    "cantidad": "12",
+    "proveedorId": "4127ba1d-77a6-4dc5-831e-c852708378f3"
+}
