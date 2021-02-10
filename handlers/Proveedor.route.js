@@ -37,4 +37,9 @@ const result =await Proveedor.bulkCreate(proveedores);
 res.sendStatus(200);
 });
 
+router.get('/getAll', async (req, res) => {
+    const proveedores = await Proveedor.findAll();
+    res.status(200).json(proveedores);
+});
+
 module.exports = router;

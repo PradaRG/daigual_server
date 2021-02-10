@@ -46,6 +46,10 @@ Content-Type: application/json
 ### Crear data falsa
 GET http://localhost:3004/proveedores/bulk 
 
+
+### Pedir listado de proveedores
+GET http://localhost:3004/proveedores/getAll
+
 ### Crear Producto
 POST http://localhost:3004/productos/create
 Content-Type: application/json
@@ -62,7 +66,7 @@ Content-Type: application/json
     "estado": "BUENO",
     "precio": "100",
     "cantidad": "12",
-    "proveedorId": "c8ff5e6a-7cfb-4457-b53f-f7f450b5d5a0"
+    "proveedorId": "3192c026-0d4a-4221-b8cc-683799d56b3f"
 }
 
 ### Get All
