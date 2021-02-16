@@ -47,42 +47,43 @@ const Producto = db.define("Producto", {
     },
   },
   estado: {
-      type: DataTypes.ENUM("BUENO", "DEFECTUOSO", "RESERVADO"),
-      allowNull: false,
+    type: DataTypes.ENUM("BUENO", "DEFECTUOSO", "RESERVADO"),
+    allowNull: false,
   },
-  precio:{// tiene que ir precio de lista y precio o eso lo hacemos en el frontend?
+  precio: {// tiene que ir precio de lista y precio o eso lo hacemos en el frontend?
     type: DataTypes.FLOAT,
     allowNull: false,
     validate: {
       min: 0,
     },
-    precioVenta:{// tiene que ir precio de lista y precio o eso lo hacemos en el frontend?
+    precioVenta: {// tiene que ir precio de lista y precio o eso lo hacemos en el frontend?
       type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
         min: 0,
-      },
-    cantidad:{
-      type: DataTypes.INTEGER,
-    allowNull: true,
-    validate: {
-      min: 0,
+      }
     },
+    cantidad: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      validate: {
+        min: 0,
+      },
     },
   },
 
-  
+
 });
 
 //faltan foreing key de provedor y pedido
 
 Producto.belongsTo(Proveedor,
   {
-  onUpdate: "CASCADE",
-  onDelete: "CASCADE",
-}
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
+  }
 
- );
+);
 Proveedor.hasMany(Producto);
 
 module.exports = Producto;
