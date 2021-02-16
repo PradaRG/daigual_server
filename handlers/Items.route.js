@@ -22,7 +22,7 @@ router.post('/create', async (req, res, next) => {
     
         const result = await proveedor.createProducto({
             codigoInterno, codigoPaquete, ubicacion, nombre, marca,
-            descripcion, alertaMin, alertaMax, estado, precio, cantidad
+            descripcion, alertaMin, alertaMax, estado, precio,precioVenta, cantidad
         });
         res.status(201).json(result);
     } catch (error) {

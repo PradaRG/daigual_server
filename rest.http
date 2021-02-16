@@ -40,33 +40,30 @@ Content-Type: application/json
     "nombre": "El sembrador SRL",
     "email": "sembrame@esta.com",
     "telefono": "343-1234565",
-    "descripcion": "Vendemos alcohol para emborrachar a tu suegra" 
+    "descripcion": "Vendemos alcohol " 
 }
 
 ### Crear data falsa
 GET http://localhost:3004/proveedores/bulk 
-
-
-### Pedir listado de proveedores
-GET http://localhost:3004/proveedores/getAll
 
 ### Crear Producto
 POST http://localhost:3004/productos/create
 Content-Type: application/json
 
 { 
-    "codigoInterno": "acerstan",
+    "codigoInterno": "adadaa",
     "codigoPaquete": "asdfug12uf1",
     "ubicacion": "PROVEEDOR",
-    "nombre": "Termo",
-    "marca": "Stanley",
-    "descripcion": "Termo de acero",
+    "nombre": "termo",
+    "marca": "luzmilagro",
+    "descripcion": "acero",
     "alertaMin": "3",
     "alertaMax": "5",
     "estado": "BUENO",
     "precio": "100",
+    "precioVenta":"101",
     "cantidad": "12",
-    "proveedorId": "3192c026-0d4a-4221-b8cc-683799d56b3f"
+    "proveedorId": "5fcc7681-e1c8-4269-a3aa-f2c118306416"
 }
 
 ### Get All

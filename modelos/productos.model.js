@@ -56,6 +56,12 @@ const Producto = db.define("Producto", {
     validate: {
       min: 0,
     },
+    precioVenta:{// tiene que ir precio de lista y precio o eso lo hacemos en el frontend?
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      validate: {
+        min: 0,
+      },
     cantidad:{
       type: DataTypes.INTEGER,
     allowNull: true,
