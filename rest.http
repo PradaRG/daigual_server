@@ -63,7 +63,7 @@ Content-Type: application/json
     "precio": "100",
     "precioVenta":"101",
     "cantidad": "12",
-    "proveedorId": "5fcc7681-e1c8-4269-a3aa-f2c118306416"
+    "proveedorId": "8817d876-ce74-44cb-9aab-6013d7b49652"
 }
 
 ### Get All

@@ -21,6 +21,7 @@ const Reserva = require('./modelos/reserva.model');
 const Usuario = require('./modelos/usuarios.model');
 
 const { verifyAccessToken } = require('./helpers/jwt_helper');
+
 if (process.env.NODE_ENV === "dev") {
   db.sync({ force: true });
 }

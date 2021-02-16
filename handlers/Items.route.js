@@ -14,7 +14,7 @@ router.post('/create', async (req, res, next) => {
     try {
         //TODO: Falta validacion verdadera de datos
         const { codigoInterno, codigoPaquete, ubicacion, nombre, marca,
-            descripcion, alertaMin, alertaMax, estado, precio, cantidad, proveedorId } = req.body;
+            descripcion, alertaMin, alertaMax, estado, precio, cantidad, precioVenta, proveedorId } = req.body;
     
         const proveedor = await Proveedor.findByPk(proveedorId);
     
