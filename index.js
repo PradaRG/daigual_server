@@ -3,6 +3,7 @@ const Express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const userRouter = require("./handlers/User.route");
 const productRouter = require("./handlers/Items.route");
 const proveedorRouter = require("./handlers/Proveedor.route");
@@ -31,11 +32,12 @@ const servidor = Express();
 servidor.use(helmet());
 servidor.use(morgan("dev"));
 servidor.use(Express.json());
-servidor.use(cors());
+servidor.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+servidor.use(cookieParser());
 
 servidor.use("/usuarios", userRouter);
-servidor.use('/proveedores', proveedorRouter);
-servidor.use('/productos',productRouter);
+servidor.use('/proveedores',verifyAccessToken, proveedorRouter);
+servidor.use('/productos', verifyAccessToken,productRouter);
 
 servidor.use(defaultRoute);
 servidor.use(errorHandler);

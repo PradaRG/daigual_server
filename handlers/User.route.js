@@ -61,7 +61,13 @@ router.post("/login", async (req, res, next) => {
       user: user,
       message: "Ingreso al sistema"
     });
-    res.status(200).json({ nombre: user.nombre, permisos: user.permisos, accessToken, refreshToken });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      maxAge: 1 * 30 * 24 * 60 * 60 * 1000,
+      path: "/",
+      sameSite:"strict",
+    });
+    res.status(200).json({ nombre: user.nombre, permisos: user.permisos, accessToken });
   } catch (error) {
     next(error);
   }
@@ -69,7 +75,7 @@ router.post("/login", async (req, res, next) => {
 
 router.delete("/logout", async (req, res, next) => {
   try {
-    const { refreshToken } = req.body;
+    const { refreshToken } = req.cookies;
     if (!refreshToken) throw createError.BadRequest();
     const userId = await verifyRefreshToken(refreshToken);
     cliente.DEL(userId, (err, value) => {
@@ -84,13 +90,20 @@ router.delete("/logout", async (req, res, next) => {
 
 router.post("/refresh-token", async (req, res, next) => {
   try {
-    const { refreshToken } = req.body;
+    const { refreshToken } = req.cookies;
+    console.log('res.cookies object');
+    console.log(res.cookies);
     if (!refreshToken) throw createError.BadRequest();
     const userId = await verifyRefreshToken(refreshToken);
-
     const accessToken = await signAccessToken(userId);
     const refToken = await signRefreshToken(userId);
-    res.status(200).json({ accessToken: accessToken, refreshToken: refToken });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      maxAge: 1 * 30 * 24 * 60 * 60 * 1000,
+      path: "/",
+      sameSite:"strict",
+    });
+    res.status(200).json({ accessToken: accessToken });
   } catch (error) {
     next(error);
   }
