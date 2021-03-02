@@ -22,14 +22,14 @@ module.exports = {
   },
   verifyAccessToken: (req, res, next) => {
     if (!req.headers["authorization"]) return next(createError.Unauthorized());
-    
+
     const authHeader = req.headers["authorization"];
     const bearerToken = authHeader.split(" ");
     const token = bearerToken[1];
     JWT.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
-      if (err) return next(createError.Unauthorized());
-      req.payload(payload);  
-      next();  
+      if (err) return next(createError.Unauthorized('Invalid Token'));
+      req.payload = payload;
+      next();
     });
   },
   signRefreshToken: (userId) => {
@@ -56,13 +56,15 @@ module.exports = {
   verifyRefreshToken: (refreshToken) => {
     return new Promise((resolve, reject) => {
       JWT.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, payload) => {
-        if (err) return reject(createError.Unauthorized());
+        if (err) {
+          return reject(createError.Unauthorized('Invalid refresh token'));
+        }
         const userId = payload.aud;
 
         cliente.GET(userId, (err, result) => {
-          if (err) reject(createError.InternalServerError());
+          if (err) reject(createError.InternalServerError('Error al obtener el token en redis'));
           if (refreshToken === result) return resolve(userId);
-          reject(createError.Unauthorized());
+          reject(createError.Unauthorized('Refresh token not stored in redis'));
         });
       }
       );

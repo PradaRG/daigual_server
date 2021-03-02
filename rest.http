@@ -4,8 +4,8 @@ POST  http://localhost:3004/usuarios/register
 Content-Type: application/json
 
 {
-    "nombre": "Juan Perez",
-    "password": "Prueba123",
+    "nombre": "usuario",
+    "password": "prueba123",
     "permisos": "ADMIN",
     "ventaRapida": 123
 }
@@ -19,9 +19,13 @@ Content-Type: application/json
     "password": "test1234"
 }
 
+### Conseguir info del usuario
+GET http://localhost:3004/usuarios/get-user
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQ0NTk2NjAsImV4cCI6MTYxNDQ1OTk2MCwiYXVkIjoiY2MyMDFlMGYtOTJmZS00MGY2LWJlOGUtMmNhYzI1NWM1ZDFiIiwiaXNzIjoicnRkZXZlbG9wbWVudC5jb20uYXIifQ.uZctZDJ6SMQ-50Ey6l6RaGXj6fWEz9sUp-AoZPLF50M
+
 ### Crear Proveedor
 POST http://localhost:3004/proveedores/create
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTM3MDM3NzksImV4cCI6MTYxMzcwNDA3OSwiYXVkIjoiY2MyMDFlMGYtOTJmZS00MGY2LWJlOGUtMmNhYzI1NWM1ZDFiIiwiaXNzIjoicnRkZXZlbG9wbWVudC5jb20uYXIifQ.N1HJaXNn6l2VrEQ5T4BieEWukWjvDTHf3TMMqfcQJJU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTM5NjcyNjIsImV4cCI6MTYxMzk2NzU2MiwiYXVkIjoiY2MyMDFlMGYtOTJmZS00MGY2LWJlOGUtMmNhYzI1NWM1ZDFiIiwiaXNzIjoicnRkZXZlbG9wbWVudC5jb20uYXIifQ.fPYue0Ae6mjYATH_d5fS22FI299WUV3S2YTchSH6JLY
 Content-Type: application/json
 
 {

@@ -2,7 +2,7 @@ const Express = require("express");
 const router = Express.Router();
 const createError = require("http-errors");
 const Usuario = require("../modelos/usuarios.model");
-const { signAccessToken, signRefreshToken, verifyRefreshToken } = require("../helpers/jwt_helper");
+const { signAccessToken, signRefreshToken, verifyRefreshToken, verifyAccessToken } = require("../helpers/jwt_helper");
 const { userRegistrationSchema, userLoginSchema } = require("../helpers/ValidationSchema");
 const logger = require("../helpers/createLogger");
 const cliente = require("../helpers/init_redis");
@@ -12,7 +12,7 @@ const cliente = require("../helpers/init_redis");
 router.post("/register", async (req, res, next) => {
   try {
     const result = await userRegistrationSchema.validateAsync(req.body);
-
+    console.log(result);
     const user = await Usuario.findOne({
       where: {
         nombre: result.nombre,
@@ -42,7 +42,6 @@ router.post("/register", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   try {
-    console.log(req.body);
     const result = await userLoginSchema.validateAsync(req.body);
     console.log(result);
     const user = await Usuario.findOne({ where: { nombre: result.nombre } });
@@ -65,12 +64,24 @@ router.post("/login", async (req, res, next) => {
       httpOnly: true,
       maxAge: 1 * 30 * 24 * 60 * 60 * 1000,
       path: "/",
-      sameSite:"strict",
+      sameSite: "strict",
     });
-    res.status(200).json({ nombre: user.nombre, permisos: user.permisos, accessToken });
+    res.status(200).json({ accessToken });
   } catch (error) {
     next(error);
   }
+});
+
+router.get("/get-user", verifyAccessToken, async (req, res, next) => {
+  try {
+    const { aud } = req.payload;
+    const user = await Usuario.findByPk(aud);
+    if (user) res.status(200).json({ nombre: user.nombre, permisos: user.permisos });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+
 });
 
 router.delete("/logout", async (req, res, next) => {
@@ -91,19 +102,17 @@ router.delete("/logout", async (req, res, next) => {
 router.post("/refresh-token", async (req, res, next) => {
   try {
     const { refreshToken } = req.cookies;
-    console.log('res.cookies object');
-    console.log(res.cookies);
-    if (!refreshToken) throw createError.BadRequest();
+    if (!refreshToken) throw createError.BadRequest('No refresh token present');
     const userId = await verifyRefreshToken(refreshToken);
     const accessToken = await signAccessToken(userId);
     const refToken = await signRefreshToken(userId);
-    res.cookie('refreshToken', refreshToken, {
+    res.cookie('refreshToken', refToken, {
       httpOnly: true,
       maxAge: 1 * 30 * 24 * 60 * 60 * 1000,
       path: "/",
-      sameSite:"strict",
+      sameSite: "strict",
     });
-    res.status(200).json({ accessToken: accessToken });
+    res.status(200).json({ accessToken });
   } catch (error) {
     next(error);
   }

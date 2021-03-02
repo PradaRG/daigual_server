@@ -33,7 +33,9 @@ servidor.use(helmet());
 servidor.use(morgan("dev"));
 servidor.use(Express.json());
 servidor.use(cors({credentials: true, origin: 'http://localhost:3000'}));
-servidor.use(cookieParser());
+servidor.use(cookieParser()); 
+
+
 
 servidor.use("/usuarios", userRouter);
 servidor.use('/proveedores',verifyAccessToken, proveedorRouter);
