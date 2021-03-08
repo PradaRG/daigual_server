@@ -38,8 +38,8 @@ servidor.use(cookieParser());
 
 
 servidor.use("/usuarios", userRouter);
-servidor.use('/proveedores',verifyAccessToken, proveedorRouter);
-servidor.use('/productos', verifyAccessToken,productRouter);
+servidor.use('/proveedores', proveedorRouter);
+servidor.use('/productos',productRouter);
 
 servidor.use(defaultRoute);
 servidor.use(errorHandler);

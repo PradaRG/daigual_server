@@ -34,7 +34,7 @@ const Producto = db.define("Producto", {
   },
   alertaMin: {
     type: DataTypes.INTEGER,
-    allowNull: true,
+    allowNull: false,
     validate: {
       min: 0,
     },
@@ -50,29 +50,27 @@ const Producto = db.define("Producto", {
     type: DataTypes.ENUM("BUENO", "DEFECTUOSO", "RESERVADO"),
     allowNull: false,
   },
-  precio: {// tiene que ir precio de lista y precio o eso lo hacemos en el frontend?
+  precio: {
     type: DataTypes.FLOAT,
     allowNull: false,
     validate: {
       min: 0,
     },
-    precioVenta: {// tiene que ir precio de lista y precio o eso lo hacemos en el frontend?
-      type: DataTypes.FLOAT,
-      allowNull: false,
-      validate: {
-        min: 0,
-      }
-    },
-    cantidad: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      validate: {
-        min: 0,
-      },
+  },
+  precioVenta: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    validate: {
+      min: 0,
+    }
+  },
+  cantidad: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    validate: {
+      min: 0,
     },
   },
-
-
 });
 
 //faltan foreing key de provedor y pedido

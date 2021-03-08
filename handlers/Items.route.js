@@ -5,9 +5,14 @@ const Proveedor = require('../modelos/proveedor.model');
 const Producto = require('../modelos/productos.model');
 
 
-router.get('/getall', async (req, res) => {
-    const producto = await Producto.findAll();
-    res.status(200).json(producto);
+router.get('/getall', async (req, res, next) => {
+    try {
+        const producto = await Producto.findAll();
+        res.status(200).json(producto);
+    } catch (error) {
+        next(error);
+    }
+
 });
 
 router.post('/create', async (req, res, next) => {
@@ -15,20 +20,20 @@ router.post('/create', async (req, res, next) => {
         //TODO: Falta validacion verdadera de datos
         const { codigoInterno, codigoPaquete, ubicacion, nombre, marca,
             descripcion, alertaMin, alertaMax, estado, precio, cantidad, precioVenta, proveedorId } = req.body;
-    
+
         const proveedor = await Proveedor.findByPk(proveedorId);
-    
+
         if (!proveedor) throw createError.NotFound('El proveedor seleccionado no fue encontrado');
-    
+
         const result = await proveedor.createProducto({
             codigoInterno, codigoPaquete, ubicacion, nombre, marca,
-            descripcion, alertaMin, alertaMax, estado, precio,precioVenta, cantidad
+            descripcion, alertaMin, alertaMax, estado, precio, precioVenta, cantidad
         });
         res.status(201).json(result);
     } catch (error) {
         next(error);
     }
-    
+
 
 });
 

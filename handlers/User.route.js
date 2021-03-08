@@ -72,7 +72,7 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-router.get("/get-user", verifyAccessToken, async (req, res, next) => {
+router.get("/getuser", verifyAccessToken, async (req, res, next) => {
   try {
     const { aud } = req.payload;
     const user = await Usuario.findByPk(aud);
@@ -92,7 +92,7 @@ router.delete("/logout", async (req, res, next) => {
     cliente.DEL(userId, (err, value) => {
       if (err) throw createError.InternalServerError();
       logger.log({ level: "info", user: userId, message: "Salio del sistema" });
-      res.sendStatus(204);
+      res.clearCookie('refreshToken').sendStatus(204);
     });
   } catch (error) {
     next(error);
