@@ -4,10 +4,10 @@ POST  http://localhost:3004/usuarios/register
 Content-Type: application/json
 
 {
-    "nombre": "usuario",
-    "password": "prueba123",
-    "permisos": "ADMIN",
-    "ventaRapida": 123
+    "nombre": "Titox",
+    "password": "bigshop",
+    "permisos": "MASTER",
+    "ventaRapida": 422
 }
 
 ### Loguear un usuario
@@ -47,8 +47,8 @@ Content-Type: application/json
     "codigoInterno": "adadaa",
     "codigoPaquete": "asdfug12uf1",
     "ubicacion": "PROVEEDOR",
-    "nombre": "termo",
-    "marca": "luzmilagro",
+    "nombre": "fasdf",
+    "marca": "asdfasdf",
     "descripcion": "acero",
     "alertaMin": "3",
     "alertaMax": "5",
@@ -56,7 +56,7 @@ Content-Type: application/json
     "precio": "100",
     "precioVenta":"101",
     "cantidad": "12",
-    "proveedorId": "8817d876-ce74-44cb-9aab-6013d7b49652"
+    "proveedorId": "3bb0aa79-b6c2-43b8-8c11-dc24d7279f77"
 }
 
 ### Get All

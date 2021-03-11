@@ -87,10 +87,14 @@ router.get("/getuser", verifyAccessToken, async (req, res, next) => {
 router.delete("/logout", async (req, res, next) => {
   try {
     const { refreshToken } = req.cookies;
-    if (!refreshToken) throw createError.BadRequest();
+    if (!refreshToken) throw createError.BadRequest('No se encontro un token de refresco');
     const userId = await verifyRefreshToken(refreshToken);
     cliente.DEL(userId, (err, value) => {
-      if (err) throw createError.InternalServerError();
+      if (err){
+        console.log(err);
+        throw createError.InternalServerError('Hubo un problema con Redis');
+      } 
+
       logger.log({ level: "info", user: userId, message: "Salio del sistema" });
       res.clearCookie('refreshToken').sendStatus(204);
     });
@@ -102,7 +106,7 @@ router.delete("/logout", async (req, res, next) => {
 router.post("/refresh-token", async (req, res, next) => {
   try {
     const { refreshToken } = req.cookies;
-    if (!refreshToken) throw createError.BadRequest('No refresh token present');
+    if (!refreshToken) throw createError.BadRequest('No se encontro un token de refresco');
     const userId = await verifyRefreshToken(refreshToken);
     const accessToken = await signAccessToken(userId);
     const refToken = await signRefreshToken(userId);

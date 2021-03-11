@@ -11,10 +11,12 @@ const Producto = db.define("Producto", {
   codigoInterno: {
     type: DataTypes.STRING(25),
     allowNull: true,
+    unique: true
   },
   codigoPaquete: {
     type: DataTypes.STRING(20),
     allowNull: true,
+    unique: true
   },
   ubicacion: {
     type: DataTypes.ENUM("PROVEEDOR", "DEPOSITO", "LOCAL"),
