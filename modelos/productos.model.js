@@ -8,7 +8,7 @@ const Producto = db.define("Producto", {
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4(),
   },
-  codigoInterno: {
+  codInterno: {
     type: DataTypes.STRING(25),
     allowNull: true,
     unique: true
