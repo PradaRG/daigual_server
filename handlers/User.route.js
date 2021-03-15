@@ -106,7 +106,7 @@ router.delete("/logout", async (req, res, next) => {
 router.post("/refresh-token", async (req, res, next) => {
   try {
     const { refreshToken } = req.cookies;
-    if (!refreshToken) throw createError.BadRequest('No se encontro un token de refresco');
+    if (!refreshToken) throw createError.Unauthorized('No se encontro un token de refresco');
     const userId = await verifyRefreshToken(refreshToken);
     const accessToken = await signAccessToken(userId);
     const refToken = await signRefreshToken(userId);
