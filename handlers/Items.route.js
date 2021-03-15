@@ -18,7 +18,7 @@ router.get('/getall', async (req, res, next) => {
 router.post('/create', async (req, res, next) => {
     try {
         //TODO: Falta validacion verdadera de datos
-        const { codigoInterno, codigoPaquete, ubicacion, nombre, marca,
+        const { codInterno, codigoPaquete, ubicacion, nombre, marca,
             descripcion, alertaMin, alertaMax, estado, precio, cantidad, precioVenta, proveedorId } = req.body;
 
         const proveedor = await Proveedor.findByPk(proveedorId);
@@ -26,7 +26,7 @@ router.post('/create', async (req, res, next) => {
         if (!proveedor) throw createError.NotFound('El proveedor seleccionado no fue encontrado');
 
         const result = await proveedor.createProducto({
-            codigoInterno, codigoPaquete, ubicacion, nombre, marca,
+            codInterno, codigoPaquete, ubicacion, nombre, marca,
             descripcion, alertaMin, alertaMax, estado, precio, precioVenta, cantidad
         });
         res.status(201).json(result);
