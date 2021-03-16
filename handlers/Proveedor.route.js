@@ -26,42 +26,57 @@ const proveedores = [{
 }];
 
 
-router.post('/create', async (req, res, next) => {
-
-    const { codigoInterno, nombre, email, telefono, descripcion } = req.body;
-    //TODO: Requiere validacion de datos
-    const createdProvider = await Proveedor.create({ codigoInterno, nombre, email, telefono, descripcion });
-    res.status(201).json(createdProvider);
+router.post('/', async (req, res, next) => {
+    try {
+        const { codigoInterno, nombre, email, telefono, descripcion } = req.body;
+        //TODO: Requiere validacion de datos
+        const createdProvider = await Proveedor.create({ codigoInterno, nombre, email, telefono, descripcion });
+        res.status(201).json(createdProvider);
+    } catch (error) {
+        next(error);
+    }
 });
 
-router.post('/update', async (req, res, next) => {
-try {
-    
-    const { id, codigoInterno, nombre, email, telefono, descripcion } = req.body;
+router.put('/', async (req, res, next) => {
+    try {
 
-    const prov = await Proveedor.findByPk(id);
+        const { id, codigoInterno, nombre, email, telefono, descripcion } = req.body;
 
-    if (!prov) throw createError.NotFound('Proveedor no encontrado');
+        const prov = await Proveedor.findByPk(id);
 
-    const updatedUser = await prov.update({
-        codigoInterno,
-        nombre,
-        email,
-        telefono,
-        descripcion
-    });
-res.status(200).json(updatedUser);
-} catch (error) {
-   next(error);
-}
+        if (!prov) throw createError.NotFound('Proveedor no encontrado');
+
+        const updatedUser = await prov.update({
+            codigoInterno,
+            nombre,
+            email,
+            telefono,
+            descripcion
+        });
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        next(error);
+    }
 });
+
+router.delete('/', async (req, res, next) => {
+    try {
+        const { id } = req.body;
+        const result = await Proveedor.destroy({ where: { id } });
+        if (result > 0) {
+            res.sendStatus(200);
+        } else throw createError.NotFound('Proveedor no encontrado');
+    } catch (error) {
+        next(error);
+    }
+})
 
 router.get('/bulk', async (req, res) => {
     const result = await Proveedor.bulkCreate(proveedores);
     res.sendStatus(200);
 });
 
-router.get('/getAll', async (req, res) => {
+router.get('/', async (req, res) => {
     const proveedores = await Proveedor.findAll();
     res.status(200).json(proveedores);
 });

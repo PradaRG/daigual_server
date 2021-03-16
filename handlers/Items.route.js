@@ -3,6 +3,7 @@ const createError = require('http-errors');
 const router = express.Router();
 const Proveedor = require('../modelos/proveedor.model');
 const Producto = require('../modelos/productos.model');
+const { create } = require('../modelos/proveedor.model');
 
 
 router.get('/getall', async (req, res, next) => {
@@ -12,7 +13,6 @@ router.get('/getall', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-
 });
 
 router.post('/create', async (req, res, next) => {
@@ -22,7 +22,10 @@ router.post('/create', async (req, res, next) => {
             descripcion, alertaMin, alertaMax, estado, precio, cantidad, precioVenta, proveedorId } = req.body;
 
         const proveedor = await Proveedor.findByPk(proveedorId);
-
+        const productFound = await Producto.findOne({where:{
+            codInterno
+        }});
+        if(productFound) throw createError.Conflict(`Ya existe el producto!`);
         if (!proveedor) throw createError.NotFound('El proveedor seleccionado no fue encontrado');
 
         const result = await proveedor.createProducto({
@@ -33,8 +36,6 @@ router.post('/create', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-
-
 });
 
 module.exports = router;

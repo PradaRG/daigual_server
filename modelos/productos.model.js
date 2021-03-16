@@ -76,13 +76,11 @@ const Producto = db.define("Producto", {
 });
 
 //faltan foreing key de provedor y pedido
-
 Producto.belongsTo(Proveedor,
   {
     onUpdate: "CASCADE",
-    onDelete: "CASCADE",
+    onDelete: "SET NULL",
   }
-
 );
 Proveedor.hasMany(Producto);
 

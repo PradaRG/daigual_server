@@ -11,14 +11,17 @@ const Proveedor = db.define("Proveedor", {
   codigoInterno: {
     type: DataTypes.STRING(25),
     allowNull: true,
+    unique: true
   },
   nombre: {
     type: DataTypes.STRING(50),
     allowNull: false,
+    unique: true
   },
   email: {
     type: DataTypes.STRING(50),
     allowNull: true,
+    unique: true,
     validate: {
       isEmail: true,
     },
@@ -26,6 +29,7 @@ const Proveedor = db.define("Proveedor", {
   telefono: {
     type: DataTypes.STRING,
     allowNull: true,
+    unique: true,
     validate: {
       len: {
         msg: "Numero de telefono invalido",
