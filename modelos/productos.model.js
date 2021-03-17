@@ -28,7 +28,7 @@ const Producto = db.define("Producto", {
   },
   marca: {
     type: DataTypes.STRING(50),
-    allowNull: false,
+    allowNull: true,
   },
   descripcion: {
     type: DataTypes.STRING(200),
