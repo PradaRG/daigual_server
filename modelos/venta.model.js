@@ -44,7 +44,7 @@ const Venta = db.define("Venta", {
 
 Venta.belongsTo(Cliente, {
   onUpdate: "CASCADE",
-  onDelete: "CASCADE",
+  onDelete: "SET NULL",
 });
 Cliente.hasMany(Venta);
 //Venta.hasMany(Producto);

@@ -52,12 +52,9 @@ const Producto = db.define("Producto", {
     type: DataTypes.ENUM("BUENO", "DEFECTUOSO", "RESERVADO"),
     allowNull: false,
   },
-  precio: {
-    type: DataTypes.FLOAT,
+  reposiciones: {
+    type: DataTypes.JSON,
     allowNull: false,
-    validate: {
-      min: 0,
-    },
   },
   precioVenta: {
     type: DataTypes.FLOAT,

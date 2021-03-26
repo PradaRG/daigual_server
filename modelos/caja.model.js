@@ -46,7 +46,7 @@ MontoEfectivoFinal: {
 
 Venta.belongsTo(Caja, {
   onUpdate: "CASCADE",
-  onDelete: "CASCADE",
+  onDelete: "SET NULL",
 });
 Caja.hasMany(Venta);
 

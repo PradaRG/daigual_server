@@ -35,7 +35,7 @@ const CuentaCorriente = db.define("CuentaCorriente", {
 
 CuentaCorriente.belongsTo(Cliente, {
   onUpdate: "CASCADE",
-  onDelete: "CASCADE",
+  onDelete: "SET NULL",
 });
 Cliente.hasOne(CuentaCorriente)
 

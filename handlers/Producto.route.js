@@ -42,15 +42,14 @@ router.post('/', async (req, res, next) => {
 router.delete('/', async (req, res, next) => {
     try {
         const { id } = req.body;
+        console.log(req.body);
         const deleted = await Producto.destroy({
             where: {
                 id
             }
         });
-
         if (deleted > 0) res.sendStatus(200);
-        else throw createError.NotFound('Item not found');
-
+        else throw createError.NotFound('Item no econtrado');
     } catch (error) {
         next(error);
     }
