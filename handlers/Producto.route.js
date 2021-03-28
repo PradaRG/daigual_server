@@ -23,15 +23,29 @@ router.post('/', async (req, res, next) => {
         const proveedor = await Proveedor.findByPk(proveedorId);
         const productFound = await Producto.findOne({
             where: {
-                codInterno
+                codigoPaquete
             }
         });
         if (productFound) throw createError.Conflict(`Ya existe el producto!`);
         if (!proveedor) throw createError.NotFound('El proveedor seleccionado no fue encontrado');
 
         const result = await proveedor.createProducto({
-            codInterno, codigoPaquete, ubicacion, nombre, marca,
-            descripcion, alertaMin, alertaMax, estado, precio, precioVenta, cantidad
+            codInterno,
+            codigoPaquete,
+            ubicacion,
+            nombre,
+            marca,
+            descripcion,
+            alertaMin,
+            alertaMax,
+            estado,
+            reposiciones: {
+                costoCompra: precio,
+                cantidadAdquirida: cantidad,
+                fecha: Date.now().toLocaleString()
+            },
+            precioVenta,
+            cantidad
         });
         res.status(201).json(result);
     } catch (error) {

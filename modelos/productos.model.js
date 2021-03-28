@@ -63,13 +63,6 @@ const Producto = db.define("Producto", {
       min: 0,
     }
   },
-  cantidad: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    validate: {
-      min: 0,
-    },
-  },
 });
 
 //faltan foreing key de provedor y pedido
