@@ -17,6 +17,15 @@ const Venta = db.define("Venta", {
       min: 1,
     },
   },
+  EstadoVenta: {
+    type: DataTypes.ENUM(
+      "aprobada",
+      "cancelada",
+      "retirarEfectivo",
+      "agregarEfectivo"
+    ), allowNull: false,
+    defaultValue: "aprobada",
+  },
   tipoPago: {
     type: DataTypes.ENUM(
       "Efectivo",
