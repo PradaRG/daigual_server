@@ -11,7 +11,6 @@ const Producto = db.define("Producto", {
   codInterno: {
     type: DataTypes.STRING(25),
     allowNull: true,
-    unique: true
   },
   codigoPaquete: {
     type: DataTypes.STRING(20),
@@ -47,10 +46,6 @@ const Producto = db.define("Producto", {
     validate: {
       min: 0,
     },
-  },
-  estado: {
-    type: DataTypes.ENUM("BUENO", "DEFECTUOSO", "RESERVADO"),
-    allowNull: false,
   },
   reposiciones: {
     type: DataTypes.JSON,

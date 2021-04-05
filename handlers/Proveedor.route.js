@@ -1,28 +1,27 @@
 const express = require('express');
 const createError = require('http-errors');
-const { create } = require('../modelos/proveedor.model');
 const router = express.Router();
 const Proveedor = require('../modelos/proveedor.model');
 
 const proveedores = [{
     "codigoInterno": "es",
     "nombre": "El sembrador SRL",
-    "email": "sembrame@esta.com",
+    "email": "elsembrador@yahoo.com",
     "telefono": "343-1234565",
-    "descripcion": "Vendemos alcohol para emborrachar a tu suegra"
+    "descripcion": "Mayorista de bebidas con y sin alcohol"
 },
 {
-    "codigoInterno": "pc",
-    "nombre": "Pollos calisa",
-    "email": "tupolla@sabrosa.net",
+    "codigoInterno": "slp",
+    "nombre": "Selplast",
+    "email": "selplast@google.net",
     "telefono": "343-1132485",
-    "descripcion": "A las chicas de verdad les gusta el pollo frito"
+    "descripcion": "Mayorista de articulos de libreria"
 }, {
-    "codigoInterno": "cm",
-    "nombre": "Chango mas",
-    "email": "changuito@chichon.com",
+    "codigoInterno": "mnt",
+    "nombre": "Montagne",
+    "email": "montagne@montagne.com.ar",
     "telefono": "343-121234765",
-    "descripcion": "Precios bajos todos los dias"
+    "descripcion": "Proveedor de articulos de camping, caza y pesca"
 }];
 
 

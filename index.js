@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const userRouter = require("./handlers/User.route");
 const productRouter = require("./handlers/Producto.route");
 const proveedorRouter = require("./handlers/Proveedor.route");
+const rubroRouter = require("./handlers/Rubro.route");
 const { defaultRoute, errorHandler } = require("./handlers/ErrorHandlers");
 const db = require("./database");
 
@@ -20,6 +21,7 @@ const Notificacion = require('./modelos/notificacion.model');
 const Pedido = require('./modelos/pedido.model');
 const Reserva = require('./modelos/reserva.model');
 const Usuario = require('./modelos/usuarios.model');
+const Rubro = require('./modelos/rubros.model');
 
 const { verifyAccessToken } = require('./helpers/jwt_helper');
 
@@ -29,18 +31,18 @@ if (process.env.NODE_ENV === "dev") {
 
 const servidor = Express();
 
+//Middlewares
 servidor.use(helmet());
 servidor.use(morgan("dev"));
 servidor.use(Express.json());
 servidor.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 servidor.use(cookieParser()); 
 
-
-
+// Routers
 servidor.use("/usuarios", userRouter);
 servidor.use('/proveedores', proveedorRouter);
 servidor.use('/productos',productRouter);
-
+servidor.use('/rubros', rubroRouter);
 servidor.use(defaultRoute);
 servidor.use(errorHandler);
 
