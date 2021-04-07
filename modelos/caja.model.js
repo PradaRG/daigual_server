@@ -11,35 +11,38 @@ const Caja = db.define("Caja", {
   estado: {
     type: DataTypes.ENUM("ABIERTA", "CERRADA"),
     allowNull: false,
-},
+  },
 
-turno: {
-  type: DataTypes.ENUM("MAÑANA", "TARDE"),
-  allowNull: false,
-},
+  turno: {
+    type: DataTypes.ENUM("MAÑANA", "TARDE"),
+    allowNull: false,
+  },
 
-//EL TOTAL DE LA CAJA CONTADA
-MontoTotalVendido: {
-  type: DataTypes.FLOAT,
-  allowNull: false,
-  validate: {
-    isFloat: true,
-    min: 1,
-  },},
-MontoEfectivoInicio: {
+  //EL TOTAL DE LA CAJA CONTADA
+  montoTotalVendido: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    validate: {
+      isFloat: true,
+      min: 0,
+    },
+  },
+  montoEfectivoInicio: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    validate: {
+      isFloat: true,
+      min: 0,
+    },
+  },
+  montoEfectivoFinal: {
     type: DataTypes.FLOAT,
     allowNull: false,
     validate: {
       isFloat: true,
       min: 1,
-    },},
-MontoEfectivoFinal: { 
-  type: DataTypes.FLOAT,
-   allowNull: false,
-   validate: {
-      isFloat: true,
-      min: 1,
-      },},
+    },
+  },
 }
 
 );
@@ -50,4 +53,4 @@ Venta.belongsTo(Caja, {
 });
 Caja.hasMany(Venta);
 
-module.exports = Venta;
+module.exports = Caja;

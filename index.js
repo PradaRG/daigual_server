@@ -8,6 +8,7 @@ const userRouter = require("./handlers/User.route");
 const productRouter = require("./handlers/Producto.route");
 const proveedorRouter = require("./handlers/Proveedor.route");
 const rubroRouter = require("./handlers/Rubro.route");
+const cajaRouter = require('./handlers/Caja.route');
 const { defaultRoute, errorHandler } = require("./handlers/ErrorHandlers");
 const db = require("./database");
 
@@ -35,14 +36,15 @@ const servidor = Express();
 servidor.use(helmet());
 servidor.use(morgan("dev"));
 servidor.use(Express.json());
-servidor.use(cors({credentials: true, origin: 'http://localhost:3000'}));
-servidor.use(cookieParser()); 
+servidor.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+servidor.use(cookieParser());
 
 // Routers
 servidor.use("/usuarios", userRouter);
 servidor.use('/proveedores', proveedorRouter);
-servidor.use('/productos',productRouter);
+servidor.use('/productos', productRouter);
 servidor.use('/rubros', rubroRouter);
+servidor.use('/caja', cajaRouter);
 servidor.use(defaultRoute);
 servidor.use(errorHandler);
 

@@ -3,6 +3,7 @@ const { DataTypes } = require("sequelize");
 const Cliente = require("./cliente.model");
 const Producto = require("./productos.model");
 const Usuario = require("./usuarios.model")
+
 const Venta = db.define("Venta", {
   id: {
     type: DataTypes.UUID,
