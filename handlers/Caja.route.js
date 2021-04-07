@@ -2,6 +2,7 @@ const express = require('express');
 const createError = require('http-errors');
 const router = express.Router();
 const Caja = require('../modelos/caja.model');
+const Venta = require('../modelos/venta.model');
 
 router.get('/caja-abierta', async (req, res, next) => { //Obtiene todas las cajas abiertas
     try {
@@ -74,11 +75,12 @@ router.post('/cerrar-caja', async (req, res, next) => {
 
 router.post('/agregar', async (req, res, next) => { //Agrega una venta
     try {
-        const { id, venta } = req.body;
+        const { id, ventaId } = req.body;
 
         const caja = await Caja.findByPk(id);
-
+        const venta = await Venta.findByPk(ventaId);
         if (!caja) throw createError('Caja no encontrada');
+        if (!venta) throw createError('Venta no encontrada, asegurese de haber concretado la operacion');
         await caja.setVenta(venta);
 
         montoTotalVendido = caja.montoTotalVendido + venta.monto;
