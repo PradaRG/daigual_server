@@ -6,8 +6,7 @@ const Producto = require('../modelos/productos.model');
 const Rubro = require('../modelos/rubros.model');
 const { create } = require('../modelos/proveedor.model');
 
-
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res, next) => { //Obtiene todos los productos
     try {
         const producto = await Producto.findAll();
         res.status(200).json(producto);
@@ -16,9 +15,31 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-//TODO: Crear metodo put para modificar productos;
+router.get('/operaciones', async (req, res, next) => {
+    try {
+        const productos = await Producto.findAll(
+            {
+                attributes: {
+                    exclude: ['alertaMin', 'alertaMax', 'reposiciones', 'ProveedorId', 'PedidoId', 'ReservaId', 'createdAt', 'updatedAt', 'deletedAt']
+                }
+            });
+        console.log(productos);
+        res.status(200).json(productos);
+    } catch (error) {
+        next(error);
+    }
+});
 
-router.post('/', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
+    try {
+
+    } catch (error) {
+
+    }
+});
+
+
+router.post('/', async (req, res, next) => { //Crea un producto
     try {
         const { codInterno, codigoPaquete, ubicacion, nombre, marca,
             descripcion, alertaMin, alertaMax, estado, precio, cantidad, precioVenta, proveedorId, rubro } = req.body;
@@ -57,7 +78,7 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-router.put('/', async (req, res, next) => {
+router.put('/', async (req, res, next) => { //Modifica un producto
     try {
         const { id, codInterno, codigoPaquete, ubicacion, nombre, marca, descripcion, alertaMin, alertaMax, estado, precio, cantidad, precioVenta, proveedorId } = req.body;
 
@@ -66,7 +87,7 @@ router.put('/', async (req, res, next) => {
         if (!productFound) throw createError.Conflict(`El producto no se encuentra en la base de datos!`);
 
         const reposiciones = productFound.reposiciones;
-        last = reposiciones.length -1;
+        last = reposiciones.length - 1;
         reposiciones[last].costoCompra = precio;
         reposiciones[last].cantidadAdquirida = cantidad;
 
@@ -92,7 +113,7 @@ router.put('/', async (req, res, next) => {
     }
 });
 
-router.delete('/', async (req, res, next) => {
+router.delete('/', async (req, res, next) => { // Elimina el producto
     try {
         const { id } = req.body;
         console.log(req.body);

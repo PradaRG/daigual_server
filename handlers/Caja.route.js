@@ -32,6 +32,14 @@ router.get('/', async (req, res, next) => { // Trae todas las cajas
 router.post('/abrir-caja', async (req, res, next) => {
     try {
         const { montoEfectivoInicio } = req.body;
+
+        const cajaAbiertaExiste = await Caja.findAll({where:{
+            estado: "ABIERTA"
+        }});
+
+        
+        if(cajaAbiertaExiste.length !== 0) throw createError('Ya existe una caja abierta en el sistema');
+
         let turno;
         const hora = new Date().getHours();
         if (hora >= 0 && hora < 15) {

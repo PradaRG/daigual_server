@@ -40,9 +40,13 @@ const Caja = db.define("Caja", {
     allowNull: false,
     validate: {
       isFloat: true,
-      min: 1,
+      min: 0,
     },
   },
+  fecha: {
+    type: DataTypes.DATE,
+    defaultValue: Date.now(),
+  }
 }
 
 );
