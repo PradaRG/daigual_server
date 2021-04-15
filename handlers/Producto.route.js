@@ -3,13 +3,22 @@ const createError = require('http-errors');
 const router = express.Router();
 const Proveedor = require('../modelos/proveedor.model');
 const Producto = require('../modelos/productos.model');
-const Rubro = require('../modelos/rubros.model');
-const { create } = require('../modelos/proveedor.model');
+const Usuario = require('../modelos/usuarios.model');
+const validate = require('../helpers/jwt_helper');
 
-router.get('/', async (req, res, next) => { //Obtiene todos los productos
+const permisos = {
+    master: "MASTER",
+    admin: "ADMIN",
+    vendedor: "VENDEDOR"
+}
+
+
+router.get('/', validate.verifyAccessToken, async (req, res, next) => { //Obtiene todos los productos
     try {
-        const producto = await Producto.findAll();
-        res.status(200).json(producto);
+        const productos = await Producto.findAll();
+
+        res.status(200).json(productos);
+
     } catch (error) {
         next(error);
     }
@@ -17,14 +26,27 @@ router.get('/', async (req, res, next) => { //Obtiene todos los productos
 
 router.get('/operaciones', async (req, res, next) => {
     try {
-        const productos = await Producto.findAll(
-            {
-                attributes: {
-                    exclude: ['alertaMin', 'alertaMax', 'reposiciones', 'ProveedorId', 'PedidoId', 'ReservaId', 'createdAt', 'updatedAt', 'deletedAt']
-                }
-            });
-        console.log(productos);
-        res.status(200).json(productos);
+
+        const producto = await Producto.findAll();
+        const filteredProducts = producto.map((prod) => {
+            let cantidad = 0;
+            prod.reposiciones.forEach((repo) => cantidad += parseInt(repo.cantidadAdquirida));
+
+            return {
+                id: prod.id,
+                codInterno: prod.codInterno,
+                codigoPaquete: prod.codigoPaquete,
+                ubicacion: prod.ubicacion,
+                nombre: prod.nombre,
+                marca: prod.marca,
+                descripcion: prod.descripcion,
+                cantidad,
+                precioVenta: prod.precioVenta
+            }
+        });
+
+        res.status(200).json(filteredProducts);
+
     } catch (error) {
         next(error);
     }

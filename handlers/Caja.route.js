@@ -11,7 +11,7 @@ router.get('/caja-abierta', async (req, res, next) => { //Obtiene todas las caja
                 estado: "ABIERTA"
             }
         });
-        if (!caja) throw createError.NotFound('No se encontro una caja abierta');
+        if (!caja || caja.length === 0) throw createError.NotFound('No se encontro una caja abierta');
 
         res.status(200).json(caja);
     } catch (error) {
