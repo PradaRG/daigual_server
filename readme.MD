@@ -11,7 +11,7 @@
 - Crear un archivo .env con las siguientes variables:
 >   - **PUERTO**               *(Puerto donde va a correr el servidor)*
 >   - **DBNAME**                *(Nombre de la base de datos a la que conectar)*
->   - **USER**                  *(nombre de usuario para la base de datos)*
+>   - **DBUSER**                  *(nombre de usuario para la base de datos)*
 >   - **DB_PASSWORD**           *(Contraseña del usuario de la base de datos)*
 >   - **DB_TYPE**               *(Uno de los [siguientes](https://sequelize.org/master/manual/dialect-specific-things.html))*
 >   - **NODE_ENV**              *("dev", "production")*

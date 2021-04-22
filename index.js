@@ -30,6 +30,9 @@ if (process.env.NODE_ENV === "dev") {
   db.sync({ force: true });
 }
 
+// console.log(require('crypto').randomBytes(64).toString('base64'));
+// console.log(require('crypto').randomBytes(64).toString('base64'));
+
 const servidor = Express();
 
 //Middlewares
