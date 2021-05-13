@@ -39,28 +39,9 @@ const Producto = db.define("Producto", {
     validate: {
       min: 0,
     },
-  },
-  alertaMax: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    validate: {
-      min: 0,
-    },
-  },
-  reposiciones: {
-    type: DataTypes.JSON,
-    allowNull: false,
-  },
-  precioVenta: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
-    validate: {
-      min: 0,
-    }
-  },
+  }
 });
 
-//faltan foreing key de provedor y pedido
 Producto.belongsTo(Proveedor,
   {
     onUpdate: "CASCADE",

@@ -12,6 +12,21 @@ const userLoginSchema = Joi.object({
   password: Joi.string().required().min(5),
 });
 
+const ProductoValidationSchema = Joi.object({
+  codInterno: Joi.string().length(14),
+  codigoPaquete: Joi.string().length(14),
+  ubicacion: Joi.string().valid("PROVEEDOR", "DEPOSITO", "LOCAL"),
+  nombre: Joi.string().max(50),
+  marca: Joi.string().max(50),
+  descripcion: Joi.string(),
+  alertaMin: Joi.number().positive().min(1),
+  alertaMax: Joi.number().positive().min(1),
+  cantidad: Joi.number().positive().min(1),
+  precio: Joi.number().min(1)
+});
+
+
+
 module.exports = {
   userRegistrationSchema,
   userLoginSchema,
