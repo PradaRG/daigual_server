@@ -1,6 +1,7 @@
 const db = require("../database");
-const { DataTypes } = require("sequelize");
+const { DataTypes, Sequelize } = require("sequelize");
 const Producto = require("./productos.model");
+const { sequelize } = require("./proveedor.model");
 
 const Stock = db.define('Stock', {
     id: {
@@ -13,11 +14,12 @@ const Stock = db.define('Stock', {
         allowNull: false,
     },
     precioCompra: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.FLOAT,
         allowNull: false
     },
     fechaAdquisicion: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
+        defaultValue: DataTypes.NOW,
     }
 });
 

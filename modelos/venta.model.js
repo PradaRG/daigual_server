@@ -53,7 +53,7 @@ Venta.belongsTo(Cliente, {
   onDelete: "SET NULL",
 });
 Cliente.hasMany(Venta);
-Venta.hasOne(Usuario);
+Venta.belongsTo(Usuario);
 Usuario.hasMany(Venta, { foreignKey: "ventaRapida" })
 
 

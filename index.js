@@ -12,7 +12,11 @@ const cajaRouter = require('./handlers/Caja.route');
 const { defaultRoute, errorHandler } = require("./handlers/ErrorHandlers");
 const db = require("./database");
 
+
+
 const Producto = require("./modelos/productos.model");
+const Stock = require("./modelos/stock.model");
+const ItemsVenta = require("./modelos/itemVenta.model");
 const Proveedor = require("./modelos/proveedor.model");
 const Venta = require('./modelos/venta.model');
 const Cliente = require('./modelos/cliente.model');

@@ -38,7 +38,14 @@ const Producto = db.define("Producto", {
     allowNull: false,
     validate: {
       min: 0,
-    },
+    }
+  },
+  precioVenta: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    validate: {
+      min: 0
+    }
   }
 });
 

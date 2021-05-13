@@ -14,7 +14,7 @@ const ItemsVenta = db.define('ItemsVenta', {
           allowNull: false,  
       },
       cantidad: {
-          type: DataTypes.NUMBER,
+          type: DataTypes.INTEGER,
           allowNull: false
       }
 });
@@ -22,8 +22,8 @@ const ItemsVenta = db.define('ItemsVenta', {
 ItemsVenta.belongsTo(Venta);
 Venta.hasMany(ItemsVenta);
 
-ItemsVenta.hasOne(Producto);
-Producto.belongsToMany(ItemsVenta);
+ItemsVenta.belongsTo(Producto);
+Producto.hasMany(ItemsVenta);
 
 
 module.exports = ItemsVenta;
