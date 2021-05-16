@@ -85,15 +85,27 @@ router.post('/', async (req, res, next) => { //Crea un producto
             alertaMin,
             precioVenta
         });
-        
+
         const stock = await Stock.create({
             cantidad,
             precioCompra: precio
         });
-        result.addStock(stock);
 
-        result.setRubro(rubro);
-        res.status(201).json(result);
+        await result.addStocks(stock);
+
+        const finalProduct = await Producto.findOne({
+            where: {
+                id: result.id
+            },
+            include: {
+                model: Stock
+            }
+        });
+
+        
+
+        res.status(200).json(finalProduct);
+
     } catch (error) {
         next(error);
     }
