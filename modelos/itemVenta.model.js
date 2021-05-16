@@ -22,8 +22,10 @@ const ItemsVenta = db.define('ItemsVenta', {
 ItemsVenta.belongsTo(Venta);
 Venta.hasMany(ItemsVenta);
 
-ItemsVenta.belongsTo(Producto);
-Producto.hasMany(ItemsVenta);
+ItemsVenta.hasMany(Producto);
+Producto.hasMany(ItemsVenta, {
+    constraints: false
+});
 
 
 module.exports = ItemsVenta;

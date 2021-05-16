@@ -17,13 +17,10 @@ const Stock = db.define('Stock', {
         type: DataTypes.FLOAT,
         allowNull: false
     },
-    fechaAdquisicion: {
-        type: DataTypes.DATEONLY,
-        defaultValue: DataTypes.NOW,
-    }
+    // fechaAdquisicion: {
+    //     type: DataTypes.DATEONLY,
+    //     defaultValue: DataTypes.NOW,
+    // }
 });
-
-Stock.belongsTo(Producto);
-Producto.hasMany(Stock);
 
 module.exports = Stock;

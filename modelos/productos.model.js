@@ -1,6 +1,7 @@
 const db = require("../database");
 const { DataTypes } = require("sequelize");
 const Proveedor = require("./proveedor.model");
+const Stock = require("./stock.model");
 
 const Producto = db.define("Producto", {
   id: {
@@ -48,6 +49,9 @@ const Producto = db.define("Producto", {
     }
   }
 });
+
+Producto.hasMany(Stock);
+Stock.belongsTo(Producto);
 
 Producto.belongsTo(Proveedor,
   {

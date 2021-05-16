@@ -6,7 +6,7 @@ const Producto = require('../modelos/productos.model');
 const Stock = require("../modelos/stock.model");
 const Usuario = require('../modelos/usuarios.model');
 const validate = require('../helpers/jwt_helper');
-const { Op } = require('sequelize');
+const { Op, INTEGER } = require('sequelize');
 
 const permisos = {
     master: "MASTER",
@@ -14,18 +14,34 @@ const permisos = {
     vendedor: "VENDEDOR"
 }
 
+function getMethods(obj) {
+    var result = [];
+    for (var id in obj) {
+        try {
+            if (typeof (obj[id]) == "function") {
+                result.push(id + ": " + obj[id].toString());
+            }
+        } catch (err) {
+            result.push(id + ": inaccessible");
+        }
+    }
+    return result;
+}
+
 
 router.get('/', validate.verifyAccessToken, async (req, res, next) => { //Obtiene todos los productos
     try {
         const productos = await Producto.findAll({
-            include: Stock,
-            where: {
-                cantidad: {
-                    [Op.gt]: 0
+            include: {
+                model: Stock,
+                where: {
+                    cantidad: {
+                        [Op.gt]: 0
+                    }
                 }
             }
         });
-
+        //TODO: Comprobar que hay productos
         res.status(200).json(productos);
 
     } catch (error) {
@@ -59,7 +75,7 @@ router.post('/', async (req, res, next) => { //Crea un producto
         if (productFound) throw createError.Conflict(`Ya existe el producto!`);
         if (!proveedor) throw createError.NotFound('El proveedor seleccionado no fue encontrado');
 
-        const result = await proveedor.createProducto({
+        const result = await Producto.create({
             codInterno,
             codigoPaquete,
             ubicacion,
@@ -67,12 +83,15 @@ router.post('/', async (req, res, next) => { //Crea un producto
             marca,
             descripcion,
             alertaMin,
-            precioVenta,
+            precioVenta
         });
-        result.createStock({
+        
+        const stock = await Stock.create({
             cantidad,
-            precio
+            precioCompra: precio
         });
+        result.addStock(stock);
+
         result.setRubro(rubro);
         res.status(201).json(result);
     } catch (error) {

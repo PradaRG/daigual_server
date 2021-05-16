@@ -3,26 +3,7 @@ const createError = require('http-errors');
 const router = express.Router();
 const Proveedor = require('../modelos/proveedor.model');
 
-const proveedores = [{
-    "codigoInterno": "es",
-    "nombre": "El sembrador SRL",
-    "email": "elsembrador@yahoo.com",
-    "telefono": "343-1234565",
-    "descripcion": "Mayorista de bebidas con y sin alcohol"
-},
-{
-    "codigoInterno": "slp",
-    "nombre": "Selplast",
-    "email": "selplast@google.net",
-    "telefono": "343-1132485",
-    "descripcion": "Mayorista de articulos de libreria"
-}, {
-    "codigoInterno": "mnt",
-    "nombre": "Montagne",
-    "email": "montagne@montagne.com.ar",
-    "telefono": "343-121234765",
-    "descripcion": "Proveedor de articulos de camping, caza y pesca"
-}];
+
 
 
 router.post('/', async (req, res, next) => {
@@ -68,11 +49,6 @@ router.delete('/', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-})
-
-router.get('/bulk', async (req, res) => {
-    const result = await Proveedor.bulkCreate(proveedores);
-    res.sendStatus(200);
 });
 
 router.get('/', async (req, res) => {

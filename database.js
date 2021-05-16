@@ -12,7 +12,8 @@ const database = new Sequelize(name, user, password,  {
     define: {
         freezeTableName: true,
         paranoid: true
-    }
+    },
+    logging: false
 });
 
 module.exports = database;
