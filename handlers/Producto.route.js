@@ -93,6 +93,8 @@ router.post('/', async (req, res, next) => { //Crea un producto
 
         await result.addStocks(stock);
 
+        await result.setRubro(rubro);
+
         const finalProduct = await Producto.findOne({
             where: {
                 id: result.id
