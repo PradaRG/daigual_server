@@ -2,19 +2,7 @@ const router = require('express').Router();
 const createError = require('http-errors');
 const Rubro = require('../modelos/rubros.model');
 
-const RubrosIniciales = [
-    { "rubro": 'Acero' },
-    { "rubro": 'Marroquineria' },
-    { "rubro": 'Lenceria' },
-    { "rubro": 'Bazar' },
-    { "rubro": 'Juguete' },
-    { "rubro": 'Libreria' },
-    { "rubro": 'Peluches' },
-    { "rubro": 'Regaleria' },
-    { "rubro": 'Santeria' },
-    { "rubro": 'Otros' },
-    { "rubro": 'Ferreteria' }
-];
+
 
 router.get('/', async (req, res, next) => {
     try {
@@ -53,13 +41,5 @@ router.delete('/', async (req, res, next) => {
     }
 });
 
-router.post('/inicializar', async (req, res, next) => {
-    try {
-        const rubros = await Rubro.bulkCreate(RubrosIniciales);
-        res.sendStatus(200);
-    } catch (error) {
-        next(error);
-    }
-});
 
 module.exports = router;

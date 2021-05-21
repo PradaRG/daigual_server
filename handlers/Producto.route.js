@@ -3,8 +3,10 @@ const createError = require('http-errors');
 const router = express.Router();
 const Proveedor = require('../modelos/proveedor.model');
 const Producto = require('../modelos/productos.model');
+const Stock = require("../modelos/stock.model");
 const Usuario = require('../modelos/usuarios.model');
 const validate = require('../helpers/jwt_helper');
+const { Op, INTEGER } = require('sequelize');
 
 const permisos = {
     master: "MASTER",
@@ -12,11 +14,19 @@ const permisos = {
     vendedor: "VENDEDOR"
 }
 
-
 router.get('/', validate.verifyAccessToken, async (req, res, next) => { //Obtiene todos los productos
     try {
-        const productos = await Producto.findAll();
-
+        const productos = await Producto.findAll({
+            include: {
+                model: Stock,
+                where: {
+                    cantidad: {
+                        [Op.gt]: 0
+                    }
+                }
+            }
+        });
+        //TODO: Comprobar que hay productos
         res.status(200).json(productos);
 
     } catch (error) {
@@ -27,44 +37,19 @@ router.get('/', validate.verifyAccessToken, async (req, res, next) => { //Obtien
 router.get('/operaciones', async (req, res, next) => {
     try {
 
-        const producto = await Producto.findAll();
-        const filteredProducts = producto.map((prod) => {
-            let cantidad = 0;
-            prod.reposiciones.forEach((repo) => cantidad += parseInt(repo.cantidadAdquirida));
-
-            return {
-                id: prod.id,
-                codInterno: prod.codInterno,
-                codigoPaquete: prod.codigoPaquete,
-                ubicacion: prod.ubicacion,
-                nombre: prod.nombre,
-                marca: prod.marca,
-                descripcion: prod.descripcion,
-                cantidad,
-                precioVenta: prod.precioVenta
-            }
+        const productos = await Producto.findAll({
+            include: Stock
         });
-
-        res.status(200).json(filteredProducts);
-
+        res.status(200).json(productos);
     } catch (error) {
         next(error);
     }
 });
 
-router.get('/', async (req, res, next) => {
-    try {
-
-    } catch (error) {
-
-    }
-});
-
-
 router.post('/', async (req, res, next) => { //Crea un producto
     try {
         const { codInterno, codigoPaquete, ubicacion, nombre, marca,
-            descripcion, alertaMin, alertaMax, estado, precio, cantidad, precioVenta, proveedorId, rubro } = req.body;
+            descripcion, alertaMin, precio, cantidad, precioVenta, proveedorId, rubro } = req.body;
 
         const proveedor = await Proveedor.findByPk(proveedorId);
         const productFound = await Producto.findOne({
@@ -75,7 +60,7 @@ router.post('/', async (req, res, next) => { //Crea un producto
         if (productFound) throw createError.Conflict(`Ya existe el producto!`);
         if (!proveedor) throw createError.NotFound('El proveedor seleccionado no fue encontrado');
 
-        const result = await proveedor.createProducto({
+        const result = await Producto.create({
             codInterno,
             codigoPaquete,
             ubicacion,
@@ -83,18 +68,31 @@ router.post('/', async (req, res, next) => { //Crea un producto
             marca,
             descripcion,
             alertaMin,
-            alertaMax,
-            estado,
-            reposiciones: [{
-                costoCompra: precio,
-                cantidadAdquirida: cantidad,
-                fecha: Date.now()
-            }],
-            precioVenta,
-            cantidad
+            precioVenta
         });
-        result.setRubro(rubro);
-        res.status(201).json(result);
+
+        const stock = await Stock.create({
+            cantidad,
+            precioCompra: precio
+        });
+
+        await result.addStocks(stock);
+
+        await result.setRubro(rubro);
+
+        const finalProduct = await Producto.findOne({
+            where: {
+                id: result.id
+            },
+            include: {
+                model: Stock
+            }
+        });
+
+        
+
+        res.status(200).json(finalProduct);
+
     } catch (error) {
         next(error);
     }

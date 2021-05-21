@@ -12,7 +12,11 @@ const cajaRouter = require('./handlers/Caja.route');
 const { defaultRoute, errorHandler } = require("./handlers/ErrorHandlers");
 const db = require("./database");
 
+
+
 const Producto = require("./modelos/productos.model");
+const Stock = require("./modelos/stock.model");
+const ItemsVenta = require("./modelos/itemVenta.model");
 const Proveedor = require("./modelos/proveedor.model");
 const Venta = require('./modelos/venta.model');
 const Cliente = require('./modelos/cliente.model');
@@ -26,8 +30,10 @@ const Rubro = require('./modelos/rubros.model');
 
 const { verifyAccessToken } = require('./helpers/jwt_helper');
 
+const initDB = require("./helpers/Init");
+
 if (process.env.NODE_ENV === "dev") {
-  db.sync({ force: true });
+  db.sync({ force: true }).then(() => initDB());
 }
 
 // console.log(require('crypto').randomBytes(64).toString('base64'));
@@ -37,7 +43,7 @@ const servidor = Express();
 
 //Middlewares
 servidor.use(helmet());
-servidor.use(morgan("dev"));
+servidor.use(morgan("short"));
 servidor.use(Express.json());
 servidor.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 servidor.use(cookieParser());

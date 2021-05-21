@@ -1,6 +1,7 @@
 const db = require("../database");
 const { DataTypes } = require("sequelize");
 const Proveedor = require("./proveedor.model");
+const Stock = require("./stock.model");
 
 const Producto = db.define("Producto", {
   id: {
@@ -38,29 +39,20 @@ const Producto = db.define("Producto", {
     allowNull: false,
     validate: {
       min: 0,
-    },
-  },
-  alertaMax: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    validate: {
-      min: 0,
-    },
-  },
-  reposiciones: {
-    type: DataTypes.JSON,
-    allowNull: false,
+    }
   },
   precioVenta: {
     type: DataTypes.FLOAT,
     allowNull: false,
     validate: {
-      min: 0,
+      min: 0
     }
-  },
+  }
 });
 
-//faltan foreing key de provedor y pedido
+Producto.hasMany(Stock);
+Stock.belongsTo(Producto);
+
 Producto.belongsTo(Proveedor,
   {
     onUpdate: "CASCADE",
