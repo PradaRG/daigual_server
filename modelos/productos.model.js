@@ -16,7 +16,7 @@ const Producto = db.define("Producto", {
   codigoPaquete: {
     type: DataTypes.STRING(20),
     allowNull: true,
-    unique: true
+    
   },
   ubicacion: {
     type: DataTypes.ENUM("PROVEEDOR", "DEPOSITO", "LOCAL"),
