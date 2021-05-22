@@ -136,7 +136,8 @@ async function initDB() {
 
         for (let index = 0; index < ProductosFalsos.length; index++) {
             Producto.create(ProductosFalsos[index]).then(prod => {
-                Stock.create(cantidadesFalsas[index]).then(stock => prod.addStocks(stock));
+                Stock.create(cantidadesFalsas[index],rubros[0],proveedores[0]).then(stock => prod.addStocks(stock));
+               
             })
 
         }
