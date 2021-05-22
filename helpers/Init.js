@@ -3,7 +3,7 @@ const Proveedor = require("../modelos/proveedor.model");
 const Rubro = require("../modelos/rubros.model");
 const Stock = require("../modelos/stock.model");
 const Usuario = require("../modelos/usuarios.model");
-
+const Cliente = require('../modelos/cliente.model');
 
 
 const RubrosIniciales = [
@@ -39,6 +39,24 @@ const ProveedoresIniciales = [{
     "email": "montagne@montagne.com.ar",
     "telefono": "343-121234765",
     "descripcion": "Proveedor de articulos de camping, caza y pesca"
+}];
+const ClientesIniciales = [{
+    "nombre": "Consumidor final",
+    "email": "sinmail@sinmail.com",
+    "telefono": "343-1234565",
+    "descripcion": ""
+},
+{
+    "nombre": "Roberto Miguel",
+    "email": "selplast@google.net",
+    "telefono": "343-1132485",
+    "descripcion": "cliente 1"
+}, {
+    
+    "nombre": "pepe more",
+    "email": "montagne@montagne.com.ar",
+    "telefono": "343-121234765",
+    "descripcion": "cliente 2"
 }];
 
 const productosIniciales = [
@@ -111,6 +129,7 @@ async function initDB() {
     try {
         const rubros = await Rubro.bulkCreate(RubrosIniciales);
         const proveedores = await Proveedor.bulkCreate(ProveedoresIniciales);
+        const clientes =await Cliente.bulkCreate(ClientesIniciales);
         const usuarios = await Usuario.bulkCreate(UsuariosIniciales, {
             individualHooks: true
         });
@@ -122,7 +141,7 @@ async function initDB() {
 
         }
 
-        if (rubros && proveedores && usuarios) console.log("Inicializado con exito");
+        if (rubros && proveedores && usuarios&& clientes) console.log("Inicializado con exito");
     } catch (error) {
         console.log(error);
     }
