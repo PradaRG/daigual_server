@@ -131,20 +131,20 @@ router.put('/', async (req, res, next) => { //Modifica un producto
 
 router.post('/repo', async (req, res, next) => {
     try {
-        const { id, cantidad, precio } = req.body;
+        const { id, cantidad, precioCompra } = req.body;
 
-        const producto = await Producto.findByPk(id, {
-            include: Stock
-        });
+        const producto = await Producto.findByPk(id);
 
         const stock = await Stock.create({
             cantidad,
-            precioCompra: precio
+            precioCompra
         });
 
-        producto.addStock(stock);
-
-        res.status(201).json(producto);
+        await producto.addStock(stock);
+        const productoFinal = await Producto.findByPk(id, {
+            include: Stock
+        });
+        res.status(201).json(productoFinal);
 
     } catch (error) {
         next(error);
