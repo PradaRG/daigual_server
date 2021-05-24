@@ -120,7 +120,7 @@ router.put('/', async (req, res, next) => { //Modifica un producto
             proveedorId
         });
 
-        const updatedProduct = Producto.findByPk(id, {include: Stock});
+        const updatedProduct = await Producto.findByPk(id, {include: Stock});
 
         res.status(200).json(updatedProduct);
 
