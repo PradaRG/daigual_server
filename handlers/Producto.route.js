@@ -49,9 +49,9 @@ router.get('/operaciones', async (req, res, next) => {
 router.post('/', async (req, res, next) => { //Crea un producto
     try {
         const { codInterno, codigoPaquete, ubicacion, nombre, marca,
-            descripcion, alertaMin, precio, cantidad, precioVenta, proveedorId, rubro } = req.body;
+            descripcion, alertaMin, precio, cantidad, precioVenta, ProveedorId, rubro } = req.body;
 
-        const proveedor = await Proveedor.findByPk(proveedorId);
+        const proveedor = await Proveedor.findByPk(ProveedorId);
         const productFound = await Producto.findOne({
             where: {
                 codigoPaquete

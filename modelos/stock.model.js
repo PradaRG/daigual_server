@@ -11,11 +11,11 @@ const Stock = db.define('Stock', {
     },
     cantidad: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     precioCompra: {
         type: DataTypes.FLOAT,
-        allowNull: false
+        allowNull: true
     },
     fechaAdquisicion: {
         type: DataTypes.DATEONLY,

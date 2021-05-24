@@ -9,6 +9,7 @@ const productRouter = require("./handlers/Producto.route");
 const proveedorRouter = require("./handlers/Proveedor.route");
 const rubroRouter = require("./handlers/Rubro.route");
 const cajaRouter = require('./handlers/Caja.route');
+const clienteRouter = require('./handlers/Cliente.route');
 const { defaultRoute, errorHandler } = require("./handlers/ErrorHandlers");
 const db = require("./database");
 
@@ -54,6 +55,7 @@ servidor.use('/proveedores', proveedorRouter);
 servidor.use('/productos', productRouter);
 servidor.use('/rubros', rubroRouter);
 servidor.use('/caja', cajaRouter);
+servidor.use('/cliente', clienteRouter);
 servidor.use(defaultRoute);
 servidor.use(errorHandler);
 
