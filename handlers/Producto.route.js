@@ -68,7 +68,8 @@ router.post('/', async (req, res, next) => { //Crea un producto
             marca,
             descripcion,
             alertaMin,
-            precioVenta
+            precioVenta,
+            ProveedorId
         });
 
         const stock = await Stock.create({

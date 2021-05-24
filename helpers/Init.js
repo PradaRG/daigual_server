@@ -47,7 +47,7 @@ const productosIniciales = [
         nombre: 'Sabanas',
         marca: 'Inducol',
         descripcion: 'Sabanas de 6 hilos',
-        alertaMin: '3',
+        alertaMin: '0',
         precioVenta: '1200',
     },
     {
@@ -74,7 +74,7 @@ const productosIniciales = [
 
 const stocksIniciales = [
     {
-        cantidad: 12,
+        cantidad: 0,
         precioCompra: 890
     },
     {
@@ -114,7 +114,9 @@ async function initDB() {
         });
 
         for (let index = 0; index < productosIniciales.length; index++) {
-            Producto.create(productosIniciales[index]).then(prod =>{
+            const createdProduct = productosIniciales[index];
+            createdProduct.ProveedorId = proveedores[index].id
+            Producto.create(createdProduct).then(prod =>{
                 Stock.create(stocksIniciales[index]).then(stock => prod.addStocks(stock));
             })
             
