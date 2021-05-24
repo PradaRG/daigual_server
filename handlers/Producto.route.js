@@ -120,7 +120,7 @@ router.put('/', async (req, res, next) => { //Modifica un producto
             proveedorId
         });
 
-        const updatedProduct = await Producto.findByPk(id, {include: Stock});
+        const updatedProduct = await Producto.findByPk(id, { include: Stock });
 
         res.status(200).json(updatedProduct);
 
@@ -150,6 +150,17 @@ router.post('/repo', async (req, res, next) => {
         next(error);
     }
 })
+
+router.delete('repo', async (req, res, next) => {
+    const { id } = req.body;
+
+    const stock = await Stock.findByPk(id);
+    if (!stock) createError.NotFound('La entrada sobre la que se desea operar no fue encontrada');
+
+    await stock.destroy();
+
+    res.sendStatus(200);
+});
 
 router.delete('/', async (req, res, next) => { // Elimina el producto
     try {
