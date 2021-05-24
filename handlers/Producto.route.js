@@ -90,7 +90,7 @@ router.post('/', async (req, res, next) => { //Crea un producto
             }
         });
 
-        
+
 
         res.status(200).json(finalProduct);
 
@@ -101,16 +101,11 @@ router.post('/', async (req, res, next) => { //Crea un producto
 
 router.put('/', async (req, res, next) => { //Modifica un producto
     try {
-        const { id, codInterno, codigoPaquete, ubicacion, nombre, marca, descripcion, alertaMin, alertaMax, estado, precio, cantidad, precioVenta, proveedorId } = req.body;
+        const { id, codInterno, codigoPaquete, ubicacion, nombre, marca, descripcion, alertaMin, estado, precioVenta, proveedorId } = req.body;
 
         const productFound = await Producto.findOne({ where: { id } });
 
         if (!productFound) throw createError.Conflict(`El producto no se encuentra en la base de datos!`);
-
-        const reposiciones = productFound.reposiciones;
-        last = reposiciones.length - 1;
-        reposiciones[last].costoCompra = precio;
-        reposiciones[last].cantidadAdquirida = cantidad;
 
         const updated = await productFound.update({
             codInterno,
@@ -120,9 +115,7 @@ router.put('/', async (req, res, next) => { //Modifica un producto
             marca,
             descripcion,
             alertaMin,
-            alertaMax,
             estado,
-            reposiciones,
             precioVenta,
             proveedorId
         });
@@ -133,6 +126,28 @@ router.put('/', async (req, res, next) => { //Modifica un producto
         next(error);
     }
 });
+
+router.post('/repo', async (req, res, next) => {
+    try {
+        const { id, cantidad, precio } = req.body;
+
+        const producto = await Producto.findByPk(id, {
+            include: Stock
+        });
+
+        const stock = await Stock.create({
+            cantidad,
+            precioCompra: precio
+        });
+
+        producto.addStock(stock);
+
+        res.status(201).json(producto);
+
+    } catch (error) {
+        next(error);
+    }
+})
 
 router.delete('/', async (req, res, next) => { // Elimina el producto
     try {
