@@ -13,6 +13,7 @@ const Venta = db.define("Venta", {
   monto: {
     type: DataTypes.FLOAT,
     allowNull: false,
+    defaultValue: 1,
     validate: {
       isFloat: true,
       min: 1,
@@ -20,23 +21,23 @@ const Venta = db.define("Venta", {
   },
   EstadoVenta: {
     type: DataTypes.ENUM(
-      "aprobada",
+      "finalizada",
       "cancelada",
-      "Reserva",
+      "abierta",
       "retirarEfectivo",
       "agregarEfectivo"
     ), allowNull: false,
-    defaultValue: "aprobada",
+    defaultValue: "abierta",
   },
   tipoPago: {
     type: DataTypes.ENUM(
-      "Efectivo",
-      "Tarjeta",
-      "Debito",
-      "Cuenta Corriente",
+      "efectivo",
+      "credito",
+      "debito",
+      "cuenta corriente",
     ),
     allowNull: false,
-    defaultValue: "Efectivo",
+    defaultValue: "efectivo",
   },
   descuento: {
     type: DataTypes.FLOAT,
@@ -46,6 +47,11 @@ const Venta = db.define("Venta", {
     type: DataTypes.FLOAT,
     allowNull: true,
   },
+}, {
+  name: {
+    singular: "Venta",
+    plural: "Ventas"
+}
 });
 
 Venta.belongsTo(Cliente, {
@@ -53,6 +59,7 @@ Venta.belongsTo(Cliente, {
   onDelete: "SET NULL",
 });
 Cliente.hasMany(Venta);
+Venta.belongsTo(Cliente);
 Venta.belongsTo(Usuario);
 Usuario.hasMany(Venta, { foreignKey: "ventaRapida" })
 

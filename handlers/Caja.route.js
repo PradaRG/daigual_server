@@ -4,14 +4,19 @@ const router = express.Router();
 const Caja = require('../modelos/caja.model');
 const Venta = require('../modelos/venta.model');
 
-router.get('/caja-abierta', async (req, res, next) => { //Obtiene todas las cajas abiertas
+router.get('/caja-abierta', async (req, res, next) => { //Obtiene la caja abierta
     try {
-        const caja = await Caja.findAll({
+        const caja = await Caja.findOne({
             where: {
                 estado: "ABIERTA"
-            }
+            },
+            include: [
+                {
+                    model: Venta
+                }
+            ]
         });
-        if (!caja || caja.length === 0) throw createError.NotFound('No se encontro una caja abierta');
+        if (!caja) throw createError.NotFound('No se encontro una caja abierta');
 
         res.status(200).json(caja);
     } catch (error) {
@@ -21,7 +26,7 @@ router.get('/caja-abierta', async (req, res, next) => { //Obtiene todas las caja
 
 router.get('/', async (req, res, next) => { // Trae todas las cajas
     try {
-        const caja = await Caja.findAll();
+        const caja = await Caja.findAll({ include: Venta });
         if (!caja) throw createError.NotFound('No hay cajas creadas');
         res.status(200).json(caja);
     } catch (error) {
@@ -33,14 +38,17 @@ router.post('/abrir-caja', async (req, res, next) => {
     try {
         const { montoEfectivoInicio } = req.body;
 
-        const cajaAbiertaExiste = await Caja.findAll({where:{
-            estado: "ABIERTA"
-        }});
+        const cajaAbiertaExiste = await Caja.findOne({
+            where: {
+                estado: "ABIERTA"
+            }
+        });
 
-        
-        if(cajaAbiertaExiste.length !== 0) throw createError('Ya existe una caja abierta en el sistema');
+
+        if (cajaAbiertaExiste) throw createError('Ya existe una caja abierta en el sistema');
 
         let turno;
+
         const hora = new Date().getHours();
         if (hora >= 0 && hora < 15) {
             turno = "MAÑANA";
@@ -48,6 +56,7 @@ router.post('/abrir-caja', async (req, res, next) => {
             turno = "TARDE";
 
         }
+
         const nuevaCaja = await Caja.create({
             estado: "ABIERTA",
             turno,
@@ -55,8 +64,18 @@ router.post('/abrir-caja', async (req, res, next) => {
             montoEfectivoInicio,
             montoEfectivoFinal: 0,
         });
+
         if (!nuevaCaja) throw createError.InternalServerError('No se pudo crear la caja');
-        res.status(201).json(nuevaCaja);
+
+        await nuevaCaja.createVenta();
+
+        const id = nuevaCaja.id;
+
+        const cajaResult = await Caja.findByPk(id, {
+            include: Venta
+        });
+
+        res.status(201).json(cajaResult);
     } catch (error) {
         next(error);
     }
@@ -69,7 +88,7 @@ router.post('/cerrar-caja', async (req, res, next) => {
         const caja = await Caja.findByPk(id);
 
         if (!caja) throw createError('No se encuentra la caja sobre la que desea operar');
-        caja.update({
+        await caja.update({
             estado: "CERRADA",
             montoEfectivoFinal
         });
@@ -81,20 +100,18 @@ router.post('/cerrar-caja', async (req, res, next) => {
 
 });
 
-router.post('/agregar', async (req, res, next) => { //Agrega una venta
+router.post('/agregarVenta', async (req, res, next) => { //Agrega una venta
     try {
-        const { id, ventaId } = req.body;
+        const { id } = req.body;
 
-        const caja = await Caja.findByPk(id);
-        const venta = await Venta.findByPk(ventaId);
-        if (!caja) throw createError('Caja no encontrada');
-        if (!venta) throw createError('Venta no encontrada, asegurese de haber concretado la operacion');
-        await caja.setVenta(venta);
+        Caja.findByPk(id).then(res => {
+            if (!res) throw createError.notFound('No se encontro la caja buscada');
+            res.createVenta();
+        }).catch(err => next(err));
 
-        montoTotalVendido = caja.montoTotalVendido + venta.monto;
-        await caja.update(montoTotalVendido);
-
-        res.sendStatus(200);
+        const caja = await Caja.findByPk(id, {include: Venta});
+        console.log('Caja agregarVenta', caja);
+        res.status(200).json(caja);
     } catch (error) {
         next(error);
     }
