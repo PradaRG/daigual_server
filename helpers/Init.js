@@ -50,6 +50,7 @@ const productosIniciales = [
         descripcion: 'Sabanas de 6 hilos',
         alertaMin: '0',
         precioVenta: '1200',
+        RubroRubro: 'Otros'
     },
     {
         codInterno: 'B',
@@ -60,6 +61,7 @@ const productosIniciales = [
         descripcion: 'Sarten doble fondo',
         alertaMin: '5',
         precioVenta: '850',
+        RubroRubro: 'Bazar'
     },
     {
         codInterno: 'J',
@@ -70,6 +72,7 @@ const productosIniciales = [
         descripcion: 'Muñeco articulado, edad recomendada 4+ años',
         alertaMin: '2',
         precioVenta: '2500',
+        RubroRubro: 'Juguete' 
     }
 ];
 

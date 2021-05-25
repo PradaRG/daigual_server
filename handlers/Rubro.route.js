@@ -16,7 +16,6 @@ router.get('/', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
     try {
         const { rubro } = req.body;
-        console.log(rubro);
         const rubroExiste = await Rubro.findByPk(rubro);
         if (rubroExiste) throw createError.Conflict('El rubro ya existe');
         const rubroCreado = await Rubro.create({rubro});

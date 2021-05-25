@@ -17,16 +17,13 @@ const permisos = {
 router.get('/', validate.verifyAccessToken, async (req, res, next) => { //Obtiene todos los productos
     try {
         const productos = await Producto.findAll({
-            include: {
+            include: [{
                 model: Stock,
-                where: {
-                    cantidad: {
-                        [Op.gt]: 0
-                    }
-                }
-            }
+            }, 
+            {
+                model: Rubro
+            }]
         });
-        //TODO: Comprobar que hay productos
         res.status(200).json(productos);
 
     } catch (error) {
@@ -151,7 +148,7 @@ router.post('/repo', async (req, res, next) => {
     }
 })
 
-router.delete('repo', async (req, res, next) => {
+router.delete('/repo/', async (req, res, next) => {
     const { id } = req.body;
 
     const stock = await Stock.findByPk(id);
