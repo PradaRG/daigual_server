@@ -2,6 +2,7 @@ const express = require('express');
 const createError = require('http-errors');
 const router = express.Router();
 const Caja = require('../modelos/caja.model');
+const ItemVenta = require('../modelos/itemVenta.model');
 const Venta = require('../modelos/venta.model');
 
 router.get('/caja-abierta', async (req, res, next) => { //Obtiene la caja abierta
@@ -12,7 +13,11 @@ router.get('/caja-abierta', async (req, res, next) => { //Obtiene la caja abiert
             },
             include: [
                 {
-                    model: Venta
+                    model: Venta,
+                    include: [
+                        {
+                            model: ItemVenta
+                        }]
                 }
             ]
         });
@@ -71,8 +76,19 @@ router.post('/abrir-caja', async (req, res, next) => {
 
         const id = nuevaCaja.id;
 
-        const cajaResult = await Caja.findByPk(id, {
-            include: Venta
+        const cajaResult = await Caja.findOne({
+            where: {
+                estado: "ABIERTA"
+            },
+            include: [
+                {
+                    model: Venta,
+                    include: [
+                        {
+                            model: ItemVenta
+                        }]
+                }
+            ]
         });
 
         res.status(201).json(cajaResult);
@@ -81,7 +97,7 @@ router.post('/abrir-caja', async (req, res, next) => {
     }
 });
 
-router.post('/cerrar-caja', async (req, res, next) => {
+router.put('/cerrar-caja', async (req, res, next) => {
     try {
 
         const { id, montoEfectivoFinal } = req.body;
@@ -109,7 +125,7 @@ router.post('/agregarVenta', async (req, res, next) => { //Agrega una venta
             res.createVenta();
         }).catch(err => next(err));
 
-        const caja = await Caja.findByPk(id, {include: Venta});
+        const caja = await Caja.findByPk(id, { include: Venta });
         console.log('Caja agregarVenta', caja);
         res.status(200).json(caja);
     } catch (error) {
