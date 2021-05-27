@@ -46,7 +46,7 @@ const servidor = Express();
 servidor.use(helmet());
 servidor.use(morgan("short"));
 servidor.use(Express.json());
-servidor.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+servidor.use(cors({ credentials: true, origin: 'http://vps-1964821-x.dattaweb.com/' }));
 servidor.use(cookieParser());
 
 // Routers
