@@ -86,7 +86,7 @@ router.post('/', async (req, res, next) => { //Crea un producto
                 id: result.id
             },
             include: {
-                models: [Stock, Rubro]
+                models: [Stock]
             }
         });
 
