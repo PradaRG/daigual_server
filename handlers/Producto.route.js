@@ -7,6 +7,7 @@ const Stock = require("../modelos/stock.model");
 const Usuario = require('../modelos/usuarios.model');
 const validate = require('../helpers/jwt_helper');
 const { Op, INTEGER } = require('sequelize');
+const Rubro = require('../modelos/rubros.model');
 
 const permisos = {
     master: "MASTER",
@@ -76,7 +77,9 @@ router.post('/', async (req, res, next) => { //Crea un producto
 
         await result.addStocks(stock);
 
-        await result.setRubro(rubro);
+        const newRubro = await Rubro.findByPk(rubro);
+
+        await result.setRubro(newRubro);
 
         const finalProduct = await Producto.findOne({
             where: {
