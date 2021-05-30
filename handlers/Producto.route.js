@@ -98,14 +98,13 @@ router.post('/', async (req, res, next) => { //Crea un producto
 
 router.put('/', async (req, res, next) => { //Modifica un producto
     try {
-        const { id, codInterno, codigoPaquete, ubicacion, nombre, marca, descripcion, alertaMin, estado, precioVenta, proveedorId } = req.body;
+        const { id, codigoPaquete, ubicacion, nombre, marca, descripcion, alertaMin, estado, precioVenta, proveedorId } = req.body;
 
         const productFound = await Producto.findOne({ where: { id } });
 
         if (!productFound) throw createError.Conflict(`El producto no se encuentra en la base de datos!`);
 
         const updated = await productFound.update({
-            codInterno,
             codigoPaquete,
             ubicacion,
             nombre,
@@ -124,6 +123,15 @@ router.put('/', async (req, res, next) => { //Modifica un producto
     } catch (error) {
         next(error);
     }
+});
+
+router.put('/rubro', async (req, res, next) =>{
+try {
+    const {rubro, porcentajeCantidad, accion} = req.body;
+    
+} catch (error) {
+    next(error);
+}
 });
 
 router.post('/repo', async (req, res, next) => {

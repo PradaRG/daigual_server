@@ -9,10 +9,6 @@ const Producto = db.define("Producto", {
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4(),
   },
-  codInterno: {
-    type: DataTypes.STRING(25),
-    allowNull: true,
-  },
   codigoPaquete: {
     type: DataTypes.STRING(20),
     allowNull: true,

@@ -42,7 +42,6 @@ const ProveedoresIniciales = [{
 
 const productosIniciales = [
     {
-        codInterno: 'BL',
         codigoPaquete: '0989809812354',
         ubicacion: "LOCAL",
         nombre: 'Sabanas',
@@ -53,7 +52,6 @@ const productosIniciales = [
         RubroRubro: 'Otros'
     },
     {
-        codInterno: 'B',
         codigoPaquete: '1236152545123',
         ubicacion: "LOCAL",
         nombre: 'Sarten',
@@ -64,7 +62,6 @@ const productosIniciales = [
         RubroRubro: 'Bazar'
     },
     {
-        codInterno: 'J',
         codigoPaquete: '1235123512',
         ubicacion: "LOCAL",
         nombre: 'Muñeco de Accion Power Ranger',
