@@ -11,6 +11,7 @@ router.post('/', async (req, res, next) => {
         const { nombre, email, telefono, descripcion } = req.body;
         //TODO: Requiere validacion de datos
         const createdProvider = await Cliente.create({  nombre, email, telefono, descripcion });
+
         res.status(201).json(createdProvider);
     } catch (error) {
         next(error);

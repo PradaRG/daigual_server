@@ -20,7 +20,7 @@ router.get('/', validate.verifyAccessToken, async (req, res, next) => { //Obtien
         const productos = await Producto.findAll({
             include: [{
                 model: Stock,
-            }, 
+            },
             {
                 model: Rubro
             }]
@@ -46,20 +46,21 @@ router.get('/operaciones', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => { //Crea un producto
     try {
-        const { codInterno, codigoPaquete, ubicacion, nombre, marca,
+        const { codigoPaquete, ubicacion, nombre, marca,
             descripcion, alertaMin, precio, cantidad, precioVenta, ProveedorId, rubro } = req.body;
 
         const proveedor = await Proveedor.findByPk(ProveedorId);
+
         const productFound = await Producto.findOne({
             where: {
                 codigoPaquete
             }
         });
+
         if (productFound) throw createError.Conflict(`Ya existe el producto!`);
         if (!proveedor) throw createError.NotFound('El proveedor seleccionado no fue encontrado');
 
         const result = await Producto.create({
-            codInterno,
             codigoPaquete,
             ubicacion,
             nombre,
@@ -85,12 +86,8 @@ router.post('/', async (req, res, next) => { //Crea un producto
             where: {
                 id: result.id
             },
-            include: {
-                models: [Stock]
-            }
+            include: Stock
         });
-
-
 
         res.status(200).json(finalProduct);
 
