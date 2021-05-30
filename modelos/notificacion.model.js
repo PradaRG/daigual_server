@@ -1,7 +1,6 @@
 const db = require("../database");
 const { DataTypes } = require("sequelize");
-const Proveedor = require("./proveedor.model");
-const Producto = require("./productos.model");
+const Usuario = require("./usuarios.model");
 
 const Notificacion = db.define("Notificacion", {
   id: {
@@ -9,21 +8,26 @@ const Notificacion = db.define("Notificacion", {
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4(),
   },
-
-  cantidad:{// esta no es necesaria pero bueno es mejor que sobre
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    validate: {
-      min: 0,
-    },
+  asunto : {
+    type: DataTypes.STRING(200),
+    allowNull: true,
+  },
     // NECESITA UNA DESCRIPCION
-    descripcion: {
-      type: DataTypes.STRING(200),
+    mensaje: {
+      type: DataTypes.STRING(600),
       allowNull: true,
     },
+
   },
-});
+);
 
 //agregar foreing key  producto
+Notificacion.belongsTo(Usuario,
+  {
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
+  }
+);
+Usuario.hasMany(Notificacion);
 
 module.exports = Notificacion;

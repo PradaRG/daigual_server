@@ -11,7 +11,7 @@ const Proveedor = db.define("Proveedor", {
   codigoInterno: {
     type: DataTypes.STRING(25),
     allowNull: true,
-    unique: true
+    
   },
   nombre: {
     type: DataTypes.STRING(50),
