@@ -8,6 +8,7 @@ const Usuario = require('../modelos/usuarios.model');
 const validate = require('../helpers/jwt_helper');
 const { Op, INTEGER } = require('sequelize');
 const Rubro = require('../modelos/rubros.model');
+const { update } = require('../modelos/proveedor.model');
 
 const permisos = {
     master: "MASTER",
@@ -125,13 +126,32 @@ router.put('/', async (req, res, next) => { //Modifica un producto
     }
 });
 
-router.put('/rubro', async (req, res, next) =>{
-try {
-    const {rubro, porcentajeCantidad, accion} = req.body;
-    
-} catch (error) {
-    next(error);
-}
+router.put('/rubro', async (req, res, next) => {
+    try {
+        const { rubro, porcentajeCantidad, aumentar } = req.body;
+        // const rubroEncontrado = await Rubro.findByPk(rubro);
+        // const productosPorModificar = await rubroEncontrado.getProductos();
+        const productosPorModificar = await Producto.findAll({
+            where: {
+                RubroRubro: rubro
+            }
+        })
+        let updatedCount = 0;
+        productosPorModificar.forEach(producto => {
+            percent =(porcentajeCantidad / 100);
+            const valor = producto.precioVenta * percent;
+            let nuevoPrecio;
+            if (aumentar) {
+                nuevoPrecio = producto.precioVenta + valor;
+            } else {
+                nuevoPrecio = producto.precioVenta - valor;
+            }
+            producto.update({ precioVenta: nuevoPrecio }).then(() => updatedCount++)
+        });
+        res.status(200).send(`updated ${updatedCount} products`);
+    } catch (error) {
+        next(error);
+    }
 });
 
 router.post('/repo', async (req, res, next) => {
