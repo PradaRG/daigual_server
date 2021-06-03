@@ -95,15 +95,10 @@ router.get("/getall", verifyAccessToken, async (req, res, next) => {
     const allUsers = await Usuario.findAll({
       attributes: ['id', 'nombre', 'permisos', 'ventaRapida']
     });
-
     res.status(200).json(allUsers);
+  } catch (error) {
+    next(error);
   }
-    
-    res.status(200).json({ nombre: user.nombre, permisos: user.permisos });
-} catch (error) {
-  console.log(error);
-  next(error);
-}
 });
 
 router.put('/change-password', verifyAccessToken, async (req, res, next) => {
