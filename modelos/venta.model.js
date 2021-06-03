@@ -19,7 +19,7 @@ const Venta = db.define("Venta", {
       min: 1,
     },
   },
-  EstadoVenta: {
+  estadoVenta: {
     type: DataTypes.ENUM(
       "finalizada",
       "cancelada",
