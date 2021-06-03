@@ -75,15 +75,36 @@ router.post("/login", async (req, res, next) => {
 router.get("/getuser", verifyAccessToken, async (req, res, next) => {
   try {
     const { aud } = req.payload;
-    if(!aud) createError.Unauthorized('Token invalido');
+    if (!aud) createError.Unauthorized('Token invalido');
     const user = await Usuario.findByPk(aud);
-    if(!user) createError.NotFound('Usuario no encontrado para el token');
+    if (!user) createError.NotFound('Usuario no encontrado para el token');
     if (user) res.status(200).json({ nombre: user.nombre, permisos: user.permisos });
   } catch (error) {
     console.log(error);
     next(error);
   }
+});
 
+router.put('/change-password', verifyAccessToken, async (req, res, next) => {
+  try {
+    const { aud } = req.payload;
+    const { password, newPassword } = req.body;
+    if (!aud) createError.Unauthorized('Token invalido');
+    
+    const user = await Usuario.findByPk(aud);
+    if (!user) createError.NotFound('Usuario no encontrado para el token');
+    
+    const isMatch = await user.comparePassword(password);
+
+    if (!isMatch) throw createError.Unauthorized("Nombre/Contraseña incorrecta");
+    
+    await user.update(password, newPassword);
+
+    res.sendStatus(200);
+
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.delete("/logout", async (req, res, next) => {
@@ -92,10 +113,10 @@ router.delete("/logout", async (req, res, next) => {
     if (!refreshToken) throw createError.BadRequest('No se encontro un token de refresco');
     const userId = await verifyRefreshToken(refreshToken);
     cliente.DEL(userId, (err, value) => {
-      if (err){
+      if (err) {
         console.log(err);
         throw createError.InternalServerError('Hubo un problema con Redis');
-      } 
+      }
 
       logger.log({ level: "info", user: userId, message: "Salio del sistema" });
       res.clearCookie('refreshToken').sendStatus(204);
