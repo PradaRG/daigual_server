@@ -85,6 +85,8 @@ router.get("/getuser", verifyAccessToken, async (req, res, next) => {
   }
 });
 
+
+
 router.get("/getall", verifyAccessToken, async (req, res, next) => {
   try {
     const { aud } = req.payload;
@@ -96,6 +98,26 @@ router.get("/getall", verifyAccessToken, async (req, res, next) => {
       attributes: ['id', 'nombre', 'permisos', 'ventaRapida']
     });
     res.status(200).json(allUsers);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put('/reset-user-password', verifyAccessToken, async (req, res, next) => {
+  try {
+    const { aud } = req.payload;
+    const { userId } = req.body;
+    if (!aud) createError.Unauthorized('Token invalido');
+    const user = await Usuario.findByPk(aud);
+    if (!user) createError.NotFound('Usuario no encontrado para el token');
+    if (user.permisos !== "MASTER") createError.Unauthorized('Permisos Insuficientes');
+    
+    const newUser = await Usuario.findByPk(userId);
+
+    await user.update(password, 'bigshop');
+
+    res.sendStatus(200);
+
   } catch (error) {
     next(error);
   }
