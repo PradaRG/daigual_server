@@ -12,13 +12,21 @@ const Notificacion = db.define("Notificacion", {
     type: DataTypes.STRING(200),
     allowNull: true,
   },
-    // NECESITA UNA DESCRIPCION
+
     mensaje: {
       type: DataTypes.STRING(600),
       allowNull: true,
     },
-
-  },
+    leido: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+    },
+    fecha: {
+      type: DataTypes.DATE,
+      defaultValue: Date.now(),
+    
+  },}
 );
 
 //agregar foreing key  producto

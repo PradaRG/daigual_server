@@ -111,10 +111,10 @@ router.put('/reset-user-password', verifyAccessToken, async (req, res, next) => 
     const user = await Usuario.findByPk(aud);
     if (!user) createError.NotFound('Usuario no encontrado para el token');
     if (user.permisos !== "MASTER") createError.Unauthorized('Permisos Insuficientes');
-    
+
     const newUser = await Usuario.findByPk(userId);
 
-    await user.update(password, 'bigshop');
+    await user.update({ password: 'bigshop' });
 
     res.sendStatus(200);
 
@@ -122,6 +122,26 @@ router.put('/reset-user-password', verifyAccessToken, async (req, res, next) => 
     next(error);
   }
 });
+
+router.delete('/delete-user', verifyAccessToken, async (req, res, next) => {
+  try {
+    const { aud } = req.payload;
+    const { userId } = req.body;
+    console.log("user id",userId);
+    console.log("body",req.body);
+    if (!aud) createError.Unauthorized('Token invalido');
+    const user = await Usuario.findByPk(aud);
+    if (!user) createError.NotFound('Usuario no encontrado para el token');
+    if (user.permisos !== "MASTER") createError.Unauthorized('Permisos Insuficientes');
+    const userBorrar = await Usuario.findByPk(userId);
+    console.log("userborrar",userBorrar);
+    await userBorrar.destroy();
+    res.sendStatus(200);
+  } catch (error) {
+    next(error);
+  }
+}
+);
 
 router.put('/change-password', verifyAccessToken, async (req, res, next) => {
   try {
@@ -136,7 +156,7 @@ router.put('/change-password', verifyAccessToken, async (req, res, next) => {
 
     if (!isMatch) throw createError.Unauthorized("Nombre/Contraseña incorrecta");
 
-    await user.update(password, newPassword);
+    await user.update({ password: newPassword });
 
     res.sendStatus(200);
 
@@ -144,6 +164,7 @@ router.put('/change-password', verifyAccessToken, async (req, res, next) => {
     next(error);
   }
 });
+
 
 router.delete("/logout", async (req, res, next) => {
   try {
