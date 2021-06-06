@@ -14,6 +14,11 @@ const ItemVenta = db.define('ItemsVenta', {
         type: DataTypes.FLOAT,
         allowNull: false,
     },
+}, {
+    name: {
+        singular: "ItemVenta",
+        plural: 'ItemsVenta'
+    }
 });
 
 ItemVenta.belongsTo(Venta);
