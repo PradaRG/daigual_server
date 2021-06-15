@@ -35,7 +35,6 @@ router.get('/', validate.verifyAccessToken, async (req, res, next) => { //Obtien
 
 router.get('/operaciones', async (req, res, next) => {
     try {
-
         const productos = await Producto.findAll({
             include: Stock
         });

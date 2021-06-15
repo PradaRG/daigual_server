@@ -72,8 +72,6 @@ router.post('/abrir-caja', async (req, res, next) => {
 
         if (!nuevaCaja) throw createError.InternalServerError('No se pudo crear la caja');
 
-        await nuevaCaja.createVenta();
-
         const id = nuevaCaja.id;
 
         const cajaResult = await Caja.findOne({
@@ -126,7 +124,6 @@ router.post('/agregarVenta', async (req, res, next) => { //Agrega una venta
         }).catch(err => next(err));
 
         const caja = await Caja.findByPk(id, { include: Venta });
-        console.log('Caja agregarVenta', caja);
         res.status(200).json(caja);
     } catch (error) {
         next(error);
