@@ -17,11 +17,19 @@ const ItemVenta = db.define('ItemsVenta', {
         type: DataTypes.FLOAT,
         allowNull: false,
     },
+    VentaId:{
+        type: DataTypes.UUID,
+        references: {
+            model: Venta,
+            key: 'id'
+    }
+    }
 }, {
     name: {
         singular: "ItemVenta",
         plural: 'ItemsVenta'
-    }
+    },
+    
 });
 
 ItemVenta.belongsTo(Venta);

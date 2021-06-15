@@ -123,7 +123,14 @@ router.post('/agregarVenta', async (req, res, next) => { //Agrega una venta
             res.createVenta();
         }).catch(err => next(err));
 
-        const caja = await Caja.findByPk(id, { include: Venta });
+        const caja = await Caja.findByPk(id, {
+            include: [{
+                model: Venta,
+                include: [{
+                    model: ItemVenta
+                }]
+            }]
+        });
         res.status(200).json(caja);
     } catch (error) {
         next(error);
