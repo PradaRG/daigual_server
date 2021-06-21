@@ -63,7 +63,7 @@ router.post('/add-item', async (req, res, next) => {
             });
 
         if (existing) await item.increment('cantidad', itemVenta.cantidad);
-        if (!existing) await venta.addItemVenta({ itemVenta });
+        if (!existing) await venta.addItemVenta({ ...itemVenta });
 
         reducirStock(item.ProductoId, item.cantidad, item.id);
 

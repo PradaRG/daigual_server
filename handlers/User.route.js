@@ -1,5 +1,6 @@
 const Express = require("express");
 const router = Express.Router();
+const bcrypt = require("bcrypt");
 const createError = require("http-errors");
 const Usuario = require("../modelos/usuarios.model");
 const { signAccessToken, signRefreshToken, verifyRefreshToken, verifyAccessToken } = require("../helpers/jwt_helper");
@@ -43,12 +44,11 @@ router.post("/register", async (req, res, next) => {
 router.post("/login", async (req, res, next) => {
   try {
     const result = await userLoginSchema.validateAsync(req.body);
-    console.log(result);
     const user = await Usuario.findOne({ where: { nombre: result.nombre } });
 
     if (!user) throw createError.NotFound("Usuario no registrado");
 
-    const isMatch = await user.comparePassword(result.password);
+    const isMatch = await bcrypt.compare(result.password, user.password);
 
     if (!isMatch) {
       throw createError.Unauthorized("Nombre/Contraseña incorrecta");
@@ -127,14 +127,14 @@ router.delete('/delete-user', verifyAccessToken, async (req, res, next) => {
   try {
     const { aud } = req.payload;
     const { userId } = req.body;
-    console.log("user id",userId);
-    console.log("body",req.body);
+    console.log("user id", userId);
+    console.log("body", req.body);
     if (!aud) createError.Unauthorized('Token invalido');
     const user = await Usuario.findByPk(aud);
     if (!user) createError.NotFound('Usuario no encontrado para el token');
     if (user.permisos !== "MASTER") createError.Unauthorized('Permisos Insuficientes');
     const userBorrar = await Usuario.findByPk(userId);
-    console.log("userborrar",userBorrar);
+    console.log("userborrar", userBorrar);
     await userBorrar.destroy();
     res.sendStatus(200);
   } catch (error) {
@@ -173,7 +173,6 @@ router.delete("/logout", async (req, res, next) => {
     const userId = await verifyRefreshToken(refreshToken);
     cliente.DEL(userId, (err, value) => {
       if (err) {
-        console.log(err);
         throw createError.InternalServerError('Hubo un problema con Redis');
       }
 

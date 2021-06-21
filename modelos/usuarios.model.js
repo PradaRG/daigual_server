@@ -43,13 +43,6 @@ const Usuario = db.define(
   }
 );
 
-Usuario.prototype.comparePassword = async function (password) {
-  try {
-    return await bcrypt.compare(password, this.password);
-  } catch (error) {
-    throw error;
-  }
-};
 
 //PERMISOS:
 //MASTER: Full + cambiar permisos

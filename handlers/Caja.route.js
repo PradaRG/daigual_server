@@ -118,20 +118,18 @@ router.post('/agregarVenta', async (req, res, next) => { //Agrega una venta
     try {
         const { id } = req.body;
 
-        Caja.findByPk(id).then(res => {
-            if (!res) throw createError.notFound('No se encontro la caja buscada');
-            res.createVenta();
-        }).catch(err => next(err));
+        const cajaActual = await Caja.findByPk(id)
+        if (!cajaActual) throw createError.notFound('No se encontro la caja buscada');
 
-        const caja = await Caja.findByPk(id, {
+        const nuevaVenta = await Venta.create();
+        cajaActual.addVentas(nuevaVenta);
+
+        const ventaResponse = await Venta.findByPk(nuevaVenta.id, {
             include: [{
-                model: Venta,
-                include: [{
-                    model: ItemVenta
-                }]
+                model: ItemVenta
             }]
         });
-        res.status(200).json(caja);
+        res.status(200).json(ventaResponse);
     } catch (error) {
         next(error);
     }
