@@ -41,6 +41,17 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
+router.get("/ventaRapida", async (req, res, next)=> {
+  try {
+    const ventasRapidas = Usuario.findAll({
+      attributes: ['ventaRapida']
+    })
+    res.status(200).json(ventasRapidas);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post("/login", async (req, res, next) => {
   try {
     const result = await userLoginSchema.validateAsync(req.body);
