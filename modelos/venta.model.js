@@ -13,10 +13,19 @@ const Venta = db.define("Venta", {
   monto: {
     type: DataTypes.FLOAT,
     allowNull: false,
-    defaultValue: 1,
+    defaultValue: 0,
     validate: {
       isFloat: true,
-      min: 1,
+      min: 0,
+    },
+  },
+  montoTarjeta: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 0,
+    validate: {
+      isFloat: true,
+      min: 0,
     },
   },
   estadoVenta: {
@@ -35,6 +44,7 @@ const Venta = db.define("Venta", {
       "credito",
       "debito",
       "cuenta corriente",
+      "Efectivo + Tarjeta"
     ),
     allowNull: false,
     defaultValue: "efectivo",

@@ -22,7 +22,7 @@ const CuentaCorriente = db.define("CuentaCorriente", {
     type: DataTypes.FLOAT,
     allowNull: true,
   },
-  recargo: {// porsi quiere agregar un recargo cada tanto
+  recargo: {// por si quiere agregar un recargo cada tanto
     type: DataTypes.FLOAT,
     allowNull: true,
   },
