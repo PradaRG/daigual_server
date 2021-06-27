@@ -69,9 +69,12 @@ Venta.belongsTo(Cliente, {
   onDelete: "SET NULL",
 });
 Cliente.hasMany(Venta);
-Usuario.hasMany(Venta);
-Venta.belongsTo(Usuario, { foreignKey: "ventaRapida" });
 
-
+Venta.belongsTo(Usuario, { 
+  foreignKey: 'ventaRapida'
+});
+Usuario.hasMany(Venta, { 
+  foreignKey: 'ventaRapida'
+});
 
 module.exports = Venta;

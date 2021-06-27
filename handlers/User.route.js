@@ -43,7 +43,7 @@ router.post("/register", async (req, res, next) => {
 
 router.get("/ventaRapida", async (req, res, next)=> {
   try {
-    const ventasRapidas = Usuario.findAll({
+    const ventasRapidas = await Usuario.findAll({
       attributes: ['ventaRapida']
     })
     res.status(200).json(ventasRapidas);
