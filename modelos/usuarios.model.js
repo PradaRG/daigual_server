@@ -26,6 +26,7 @@ const Usuario = db.define(
     ventaRapida: {
       type: DataTypes.INTEGER,
       unique: true,
+      primaryKey: true,
       allowNull: false,
     },
   },

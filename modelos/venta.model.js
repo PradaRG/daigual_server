@@ -40,14 +40,14 @@ const Venta = db.define("Venta", {
   },
   tipoPago: {
     type: DataTypes.ENUM(
-      "efectivo",
-      "credito",
-      "debito",
-      "cuenta corriente",
+      "Efectivo",
+      "Tarjeta",
+      "Debito",
+      "Cuenta Corriente",
       "Efectivo + Tarjeta"
     ),
     allowNull: false,
-    defaultValue: "efectivo",
+    defaultValue: "Efectivo",
   },
   descuento: {
     type: DataTypes.FLOAT,
@@ -70,11 +70,7 @@ Venta.belongsTo(Cliente, {
 });
 Cliente.hasMany(Venta);
 
-Venta.belongsTo(Usuario, { 
-  foreignKey: 'ventaRapida'
-});
-Usuario.hasMany(Venta, { 
-  foreignKey: 'ventaRapida'
-});
+Venta.belongsTo(Usuario);
+Usuario.hasMany(Venta);
 
 module.exports = Venta;

@@ -4,6 +4,7 @@ const router = express.Router();
 const Caja = require('../modelos/caja.model');
 const ItemVenta = require('../modelos/itemVenta.model');
 const Venta = require('../modelos/venta.model');
+const Usuario = require("../modelos/usuarios.model");
 
 router.get('/caja-abierta', async (req, res, next) => { //Obtiene la caja abierta
     try {
@@ -116,20 +117,43 @@ router.put('/cerrar-caja', async (req, res, next) => {
 
 router.post('/agregarVenta', async (req, res, next) => { //Agrega una venta
     try {
-        const { id } = req.body;
-
-        const cajaActual = await Caja.findByPk(id)
-        if (!cajaActual) throw createError.notFound('No se encontro la caja buscada');
-
-        const nuevaVenta = await Venta.create();
-        cajaActual.addVentas(nuevaVenta);
-
-        const ventaResponse = await Venta.findByPk(nuevaVenta.id, {
-            include: [{
-                model: ItemVenta
-            }]
+        const { venta } = req.body;
+        const usuario = await Usuario.findOne({
+            where: {
+                ventaRapida: venta.ventaRapida
+            }
         });
-        res.status(200).json(ventaResponse);
+
+        const nuevaVenta = await Venta.create({
+            monto: venta.monto,
+            montoTarjeta: venta.montoTarjeta,
+            estadoVenta: "finalizada",
+            tipoPago: venta.tipoPago,
+            descuento: venta.descuento,
+            recargo: venta.recargo,
+            ClienteId: venta.ClienteId,
+            UsuarioId: usuario.id,
+            CajaId: venta.CajaId,
+            UsuarioId: usuario.id
+        });
+
+        if (!nuevaVenta) throw createError.InternalServerError('No se pudo crear la venta');
+
+        const items = venta.ItemsVenta;
+
+        items.forEach(item =>{
+            ItemVenta.create({
+                cantidad: item.cantidad,
+                precioVenta: item.precioVenta,
+                ProductoId: venta.ProductoId
+            }).then(item => {
+                nuevaVenta.addItemVenta(item);
+            }).catch(error => {
+                console.log(error);
+            });
+        });
+
+        res.sendStatus(200);
     } catch (error) {
         next(error);
     }
