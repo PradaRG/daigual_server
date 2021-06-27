@@ -5,6 +5,7 @@ const Caja = require('../modelos/caja.model');
 const ItemVenta = require('../modelos/itemVenta.model');
 const Venta = require('../modelos/venta.model');
 const Usuario = require("../modelos/usuarios.model");
+const { reducirStock } = require('../helpers/Stock_helper');
 
 router.get('/caja-abierta', async (req, res, next) => { //Obtiene la caja abierta
     try {
@@ -138,16 +139,17 @@ router.post('/agregarVenta', async (req, res, next) => { //Agrega una venta
         });
 
         if (!nuevaVenta) throw createError.InternalServerError('No se pudo crear la venta');
-
+        
         const items = venta.ItemsVenta;
 
         items.forEach(item =>{
             ItemVenta.create({
                 cantidad: item.cantidad,
                 precioVenta: item.precioVenta,
-                ProductoId: venta.ProductoId
+                ProductoId: item.ProductoId
             }).then(item => {
                 nuevaVenta.addItemVenta(item);
+                reducirStock(item.ProductoId, item.cantidad, item.id);
             }).catch(error => {
                 console.log(error);
             });
