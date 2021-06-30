@@ -1,7 +1,6 @@
 const db = require("../database");
 const { DataTypes, Sequelize } = require("sequelize");
 const Producto = require("./productos.model");
-const { sequelize } = require("./proveedor.model");
 
 const Stock = db.define('Stock', {
     id: {

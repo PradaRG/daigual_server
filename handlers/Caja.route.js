@@ -6,6 +6,8 @@ const ItemVenta = require('../modelos/itemVenta.model');
 const Venta = require('../modelos/venta.model');
 const Usuario = require("../modelos/usuarios.model");
 const { reducirStock } = require('../helpers/Stock_helper');
+const Movimientos = require('../modelos/movimientos.model');
+const { create } = require('../modelos/usuarios.model');
 
 router.get('/caja-abierta', async (req, res, next) => { //Obtiene la caja abierta
     try {
@@ -19,7 +21,10 @@ router.get('/caja-abierta', async (req, res, next) => { //Obtiene la caja abiert
                     include: [
                         {
                             model: ItemVenta
-                        }]
+                        }],
+
+                }, {
+                    model: Movimientos
                 }
             ]
         });
@@ -63,7 +68,6 @@ router.post('/abrir-caja', async (req, res, next) => {
             turno = "TARDE";
 
         }
-
         const nuevaCaja = await Caja.create({
             estado: "ABIERTA",
             turno,
@@ -71,9 +75,7 @@ router.post('/abrir-caja', async (req, res, next) => {
             montoEfectivoInicio,
             montoEfectivoFinal: 0,
         });
-
         if (!nuevaCaja) throw createError.InternalServerError('No se pudo crear la caja');
-
         const id = nuevaCaja.id;
 
         const cajaResult = await Caja.findOne({
@@ -87,10 +89,12 @@ router.post('/abrir-caja', async (req, res, next) => {
                         {
                             model: ItemVenta
                         }]
+                },
+                {
+                    model: Movimientos
                 }
             ]
         });
-
         res.status(201).json(cajaResult);
     } catch (error) {
         next(error);
@@ -99,7 +103,6 @@ router.post('/abrir-caja', async (req, res, next) => {
 
 router.put('/cerrar-caja', async (req, res, next) => {
     try {
-
         const { id, montoEfectivoFinal } = req.body;
         const caja = await Caja.findByPk(id);
 
@@ -109,11 +112,31 @@ router.put('/cerrar-caja', async (req, res, next) => {
             montoEfectivoFinal
         });
         res.sendStatus(200);
-
     } catch (error) {
         next(error);
     }
 
+});
+router.post('/agregarMovimiento', async (req, res, next) => {
+    try {
+        const { descripcion, operacion, monto, ventaRapida, CajaId } = req.body;
+
+        const user = await Usuario.findOne({
+            where: {
+                ventaRapida
+            }
+        });
+        console.log('Usuario ln 122 caja route', user.toJSON());
+        if (!user) throw createError.NotFound('Numero de venta rapida invalido');
+
+        const movimientoCreado = await Movimientos.create({ descripcion, operacion, monto, CajaId, UsuarioId: user.id });
+
+        if (!movimientoCreado) throw createError.InternalServerError('No se pudo crear el movimiento');
+
+        res.status(200).json(movimientoCreado);
+    } catch (error) {
+        next(error);
+    }
 });
 
 router.post('/agregarVenta', async (req, res, next) => { //Agrega una venta
@@ -139,10 +162,10 @@ router.post('/agregarVenta', async (req, res, next) => { //Agrega una venta
         });
 
         if (!nuevaVenta) throw createError.InternalServerError('No se pudo crear la venta');
-        
+
         const items = venta.ItemsVenta;
 
-        items.forEach(item =>{
+        items.forEach(item => {
             ItemVenta.create({
                 cantidad: item.cantidad,
                 precioVenta: item.precioVenta,

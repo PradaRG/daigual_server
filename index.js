@@ -26,6 +26,7 @@ const Caja = require('./modelos/caja.model');
 const Reserva = require('./modelos/reserva.model');
 const Usuario = require('./modelos/usuarios.model');
 const Rubro = require('./modelos/rubros.model');
+const Movimientos = require('./modelos/movimientos.model');
 
 const { verifyAccessToken } = require('./helpers/jwt_helper');
 
