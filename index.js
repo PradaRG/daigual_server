@@ -10,6 +10,7 @@ const proveedorRouter = require("./handlers/Proveedor.route");
 const ventaRouter = require("./handlers/Venta.route");
 const rubroRouter = require("./handlers/Rubro.route");
 const cajaRouter = require('./handlers/Caja.route');
+const reservaRouter = require('./handlers/reserva.route');
 const clienteRouter = require('./handlers/Cliente.route');
 const { defaultRoute, errorHandler } = require("./handlers/ErrorHandlers");
 const db = require("./database");
@@ -32,7 +33,9 @@ const { verifyAccessToken } = require('./helpers/jwt_helper');
 
 const initDB = require("./helpers/Init");
 
+let origins = ['http://vps-1964821-x.dattaweb.com:3000'];
 if (process.env.NODE_ENV === "dev") {
+  origins.push('http://localhost:3000');
   db.sync({ force: true }).then(() => initDB());
 }
 
@@ -41,11 +44,12 @@ if (process.env.NODE_ENV === "dev") {
 
 const servidor = Express();
 
+
 //Middlewares
 servidor.use(helmet());
 servidor.use(morgan("short"));
 servidor.use(Express.json());
-servidor.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+servidor.use(cors({ credentials: true, origin: origins }));
 servidor.use(cookieParser());
 
 // Routers
@@ -56,6 +60,7 @@ servidor.use('/rubros', rubroRouter);
 servidor.use('/caja', cajaRouter);
 servidor.use('/venta', ventaRouter);
 servidor.use('/cliente', clienteRouter);
+servidor.use('/reserva', reservaRouter);
 servidor.use(defaultRoute);
 servidor.use(errorHandler);
 

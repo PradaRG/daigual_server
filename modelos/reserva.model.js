@@ -2,6 +2,8 @@ const db = require("../database");
 const { DataTypes } = require("sequelize");
 const Cliente = require("./cliente.model");
 const Venta = require("./productos.model");
+const Producto = require("./productos.model");
+const Movimientos = require("./movimientos.model");
 
 // pensar reserva estado de venta si se vendio o no al momento del cierre 
 // notificacion  pagado 
@@ -20,20 +22,19 @@ const Reserva = db.define("Reserva", {
       min: 1,
     },
   },
-  
-  descuento: {
+  montoAbonado: {
     type: DataTypes.FLOAT,
-    allowNull: true,
+    allowNull: false,
+    validate: {
+      isFloat: true,
+      min: 0,
+    },
   },
-  recargo: {// porsi quiere agregar un recargo cada tanto
-    type: DataTypes.FLOAT,
-    allowNull: true,
-  },
-  pagoEnEfectivo: {
-    type: DataTypes.FLOAT,
-    allowNull: true,
-  },
-
+  entregado : {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    allowNull: false
+  }
 });
 
 Reserva.belongsTo(Cliente, {
@@ -41,7 +42,17 @@ Reserva.belongsTo(Cliente, {
   onDelete: "SET NULL",
 });
 Cliente.hasMany(Reserva)
-Reserva.hasOne(Venta);
-Venta.belongsTo(Reserva);
+Reserva.belongsTo(Producto);
+Producto.hasOne(Reserva, {
+  primaryKey: {
+    allowNull: true
+  }
+});
+Reserva.hasMany(Movimientos);
+Movimientos.belongsTo(Reserva, {
+  primaryKey: {
+    allowNull: true
+  }
+})
 
 module.exports = Reserva;
