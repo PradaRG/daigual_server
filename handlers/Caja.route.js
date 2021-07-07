@@ -8,6 +8,7 @@ const Usuario = require("../modelos/usuarios.model");
 const { reducirStock } = require('../helpers/Stock_helper');
 const Movimientos = require('../modelos/movimientos.model');
 const { create } = require('../modelos/usuarios.model');
+const Producto = require('../modelos/productos.model');
 
 router.get('/caja-abierta', async (req, res, next) => { //Obtiene la caja abierta
     try {
@@ -42,7 +43,10 @@ router.get('/', async (req, res, next) => { // Trae todas las cajas
             include: {
                 model: Venta,
                 include: {
-                    model: ItemVenta
+                    model: ItemVenta,
+                    include: {
+                        model: Producto,
+                        }
                 }
             }
         });
