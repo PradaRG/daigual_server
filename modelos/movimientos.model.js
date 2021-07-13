@@ -25,6 +25,14 @@ const Movimientos = db.define('Movimientos', {
             min: 0,
         },
     },
+    estado: {
+        type: DataTypes.ENUM(
+            "finalizada",
+            "cancelada",
+        ),
+        allowNull: false,
+        defaultValue: "finalizada"
+    }
 })
 
 Movimientos.hasOne(Usuario);
