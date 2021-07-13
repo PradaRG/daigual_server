@@ -39,15 +39,18 @@ router.get('/caja-abierta', async (req, res, next) => { //Obtiene la caja abiert
 router.get('/', async (req, res, next) => { // Trae todas las cajas
     try {
         const caja = await Caja.findAll({
-            include: {
-                model: Venta,
+            include: 
+               [ {model: Movimientos,
+                },
+                {model: Venta,
                 include: {
                     model: ItemVenta,
                     include: {
                         model: Producto,
-                    }
-                }
-            }
+                        }
+                }},
+              ]
+
         });
         if (!caja) throw createError.NotFound('No hay cajas creadas');
         res.status(200).json(caja);
