@@ -5,7 +5,7 @@ const Caja = require('../modelos/caja.model');
 const ItemVenta = require('../modelos/itemVenta.model');
 const Venta = require('../modelos/venta.model');
 const Usuario = require("../modelos/usuarios.model");
-const { reducirStock } = require('../helpers/Stock_helper');
+const { reducirStock, revertirStock } = require('../helpers/Stock_helper');
 const Movimientos = require('../modelos/movimientos.model');
 const Producto = require('../modelos/productos.model');
 
@@ -45,7 +45,7 @@ router.get('/', async (req, res, next) => { // Trae todas las cajas
                     model: ItemVenta,
                     include: {
                         model: Producto,
-                        }
+                    }
                 }
             }
         });
@@ -155,11 +155,32 @@ router.delete('/bajaMovimiento', async (req, res, next) => {
 
         const movimientoCreado = await Movimientos.findByPk(id);
 
-        if (!movimientoCreado) throw createError.NotFound('No se pudo econtrar el movimiento');
+        if (!movimientoCreado) throw createError.NotFound('No se pudo encontrar el movimiento');
 
-       await movimientoCreado.update({estado: 'cancelada'});
+        await movimientoCreado.update({ estado: 'cancelada' });
 
         res.status(200).json(movimientoCreado);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.delete('/bajaVenta', async (req, res, next) => {
+    try {
+        const { id } = req.body;
+
+        const venta = await Venta.findByPk(id, {
+            include: ItemVenta
+        });
+
+        if (!venta) throw createError.NotFound('No se pudo encontrar la venta');
+
+        await venta.update({ estadoVenta: 'cancelada' });
+
+        revertirStock(venta.ItemsVenta);
+
+        res.sendStatus(200);
+
     } catch (error) {
         next(error);
     }

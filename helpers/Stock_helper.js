@@ -37,7 +37,7 @@ async function reducirStock(ProductoId, cantidad, ItemVentaId) {
                         await stock.save();
                         sustraccion = 0;
                     } else {
-                        stock.cantidad =  nuevoValor;
+                        stock.cantidad = nuevoValor;
                         stock.save();
                     }
                 } else {
@@ -70,8 +70,26 @@ async function reducirStock(ProductoId, cantidad, ItemVentaId) {
 
 }
 
-async function revertirStock() {
-
+async function revertirStock(ItemsVenta) {
+    try {
+        ItemsVenta.forEach(item => { // Por cada ItemVenta busca los historiales asociados
+            Historial.findAll({ where: { ItemVentaId: item.id } })
+                .then(historiales => {
+                    historiales.forEach(historial => { //Por cada uno de los historiales encontrados busca el stock y lo actualiza
+                        Stock.findByPk(historial.StockId)
+                            .then(stock => {
+                                stock.update({
+                                    cantidad: stock.cantidad + historial.cantidad
+                                })
+                                    .then(exito => historial.destroy({ force: true }))
+                                    .catch(err => console.log(err));
+                            });
+                    })
+                }).catch(err => console.log(err));
+        });
+    } catch (error) {
+        console.log('Stock_helper linea 77', error);
+    }
 }
 
 
