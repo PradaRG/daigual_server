@@ -31,11 +31,7 @@ const Venta = db.define("Venta", {
     type: DataTypes.ENUM(
       "finalizada",
       "cancelada",
-      "abierta",
-      "retirarEfectivo",
-      "agregarEfectivo"
     ), allowNull: false,
-    defaultValue: "abierta",
   },
   tipoPago: {
     type: DataTypes.ENUM(

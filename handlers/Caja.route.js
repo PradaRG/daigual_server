@@ -7,7 +7,6 @@ const Venta = require('../modelos/venta.model');
 const Usuario = require("../modelos/usuarios.model");
 const { reducirStock } = require('../helpers/Stock_helper');
 const Movimientos = require('../modelos/movimientos.model');
-const { create } = require('../modelos/usuarios.model');
 const Producto = require('../modelos/productos.model');
 
 router.get('/caja-abierta', async (req, res, next) => { //Obtiene la caja abierta
@@ -143,6 +142,22 @@ router.post('/agregarMovimiento', async (req, res, next) => {
         const movimientoCreado = await Movimientos.create({ descripcion, operacion, monto, CajaId, UsuarioId: user.id });
 
         if (!movimientoCreado) throw createError.InternalServerError('No se pudo crear el movimiento');
+
+        res.status(200).json(movimientoCreado);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.delete('/bajaMovimiento', async (req, res, next) => {
+    try {
+        const { id } = req.body;
+
+        const movimientoCreado = await Movimientos.findByPk(id);
+
+        if (!movimientoCreado) throw createError.NotFound('No se pudo econtrar el movimiento');
+
+       await movimientoCreado.update({estado: 'cancelada'});
 
         res.status(200).json(movimientoCreado);
     } catch (error) {

@@ -7,15 +7,12 @@ const cookieParser = require('cookie-parser');
 const userRouter = require("./handlers/User.route");
 const productRouter = require("./handlers/Producto.route");
 const proveedorRouter = require("./handlers/Proveedor.route");
-const ventaRouter = require("./handlers/Venta.route");
 const rubroRouter = require("./handlers/Rubro.route");
 const cajaRouter = require('./handlers/Caja.route');
 const reservaRouter = require('./handlers/reserva.route');
 const clienteRouter = require('./handlers/Cliente.route');
 const { defaultRoute, errorHandler } = require("./handlers/ErrorHandlers");
 const db = require("./database");
-
-
 
 const Producto = require("./modelos/productos.model");
 const Stock = require("./modelos/stock.model");
@@ -58,7 +55,6 @@ servidor.use('/proveedores', proveedorRouter);
 servidor.use('/productos', productRouter);
 servidor.use('/rubros', rubroRouter);
 servidor.use('/caja', cajaRouter);
-servidor.use('/venta', ventaRouter);
 servidor.use('/cliente', clienteRouter);
 servidor.use('/reserva', reservaRouter);
 servidor.use(defaultRoute);
