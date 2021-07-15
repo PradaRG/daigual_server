@@ -22,6 +22,12 @@ const Reserva = db.define("Reserva", {
       min: 1,
     },
   },
+  estado: {
+    type: DataTypes.ENUM(
+      "entregado",
+      "pendiente",
+      "cancelado")
+  },
   montoAbonado: {
     type: DataTypes.FLOAT,
     allowNull: false,
@@ -30,11 +36,6 @@ const Reserva = db.define("Reserva", {
       min: 0,
     },
   },
-  entregado : {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-    allowNull: false
-  }
 });
 
 Reserva.belongsTo(Cliente, {
@@ -42,12 +43,14 @@ Reserva.belongsTo(Cliente, {
   onDelete: "SET NULL",
 });
 Cliente.hasMany(Reserva)
+
 Reserva.belongsTo(Producto);
 Producto.hasOne(Reserva, {
   primaryKey: {
     allowNull: true
   }
 });
+
 Reserva.hasMany(Movimientos);
 Movimientos.belongsTo(Reserva, {
   primaryKey: {
