@@ -139,7 +139,7 @@ router.post('/agregarMovimiento', async (req, res, next) => {
                 ventaRapida
             }
         });
-        console.log('Usuario ln 122 caja route', user.toJSON());
+        
         if (!user) throw createError.NotFound('Numero de venta rapida invalido');
 
         const movimientoCreado = await Movimientos.create({ descripcion, operacion, monto, CajaId, UsuarioId: user.id });
