@@ -63,11 +63,12 @@ router.put('/', async (req, res, next) => {
 
         const nuevoTotal = reservaAlmacenada.montoAbonado + parseInt(monto);
 
-        console.log('Nuevo total',nuevoTotal);
+        console.log('Nuevo total', nuevoTotal);
 
         if (nuevoTotal > reservaAlmacenada.monto) throw createError.InternalServerError("El monto supera el valor del producto");
 
         await reservaAlmacenada.update({ montoAbonado: nuevoTotal });
+        if(nuevoTotal === reservaAlmacenada.monto) reservaAlmacenada.update({estado: "entregado"})
 
         await Movimientos.create({
             descripcion: `Pago del cliente ${cliente.nombre}, por la reserva del producto ${producto.nombre}`,
@@ -83,6 +84,41 @@ router.put('/', async (req, res, next) => {
 
 
         res.status(200).json(reservaAlmacenada);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.put('/cancelar', async (req, res, next) => {
+    try {
+        const { reserva } = req.body;
+
+        const reservaABorrar = await Reserva.findByPk(reserva.id);
+
+        if (!reservaABorrar) throw createError.NotFound('La reserva que busca borrar no existe');
+
+        reservaABorrar.update({ estado: "cancelado" });
+
+        await reservaABorrar.save();
+
+        res.sendStatus(200);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.put('/entregar', async (req, res, next) => {
+    try {
+        const { reserva } = req.body;
+
+        const reservaAEntregar = await Reserva.findByPk(reserva.id);
+        if (!reservaAEntregar) throw createError.NotFound('La reserva que busca entregar no existe');
+
+        reservaAEntregar.update({
+            estado: "entregado"
+        });
+        await reservaAEntregar.save();
+        res.sendStatus(200);
     } catch (error) {
         next(error);
     }
