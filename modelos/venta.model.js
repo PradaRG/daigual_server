@@ -38,7 +38,6 @@ const Venta = db.define("Venta", {
       "Efectivo",
       "Tarjeta",
       "Debito",
-      "Cuenta Corriente",
       "Efectivo + Tarjeta"
     ),
     allowNull: false,
