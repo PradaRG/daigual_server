@@ -1,5 +1,6 @@
 const express = require('express');
 const createError = require('http-errors');
+const Caja = require('../modelos/caja.model');
 const Cliente = require('../modelos/cliente.model');
 const Movimientos = require('../modelos/movimientos.model');
 const Producto = require('../modelos/productos.model');
@@ -35,7 +36,7 @@ router.post('/', async (req, res, next) => {
             operacion: "deposito",
             monto: reservaCreada.montoAbonado,
             UsuarioId: user.id,
-            estado:"finalizada",
+            estado: "finalizada",
             CajaId: req.body.CajaId,
             ReservaId: reservaCreada.id
         });
@@ -47,10 +48,41 @@ router.post('/', async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
     try {
-        const { montoAbonado, estado } = req.body;
-        const reservaCreada = await Reserva.update({ montoAbonado, estado });
-        if (!reservaCreada) throw createError.InternalServerError("No se pudo crear la reserva");
-        res.status(200).json(reservaCreada);
+        const { reserva, ventaRapida, monto, CajaId } = req.body;
+
+        const cliente = await Cliente.findByPk(reserva.ClienteId);
+        const producto = await Producto.findByPk(reserva.ProductoId);
+
+        const user = await Usuario.findOne({
+            where: {
+                ventaRapida
+            }
+        });
+
+        const reservaAlmacenada = await Reserva.findByPk(reserva.id);
+
+        const nuevoTotal = reservaAlmacenada.montoAbonado + parseInt(monto);
+
+        console.log('Nuevo total',nuevoTotal);
+
+        if (nuevoTotal > reservaAlmacenada.monto) throw createError.InternalServerError("El monto supera el valor del producto");
+
+        await reservaAlmacenada.update({ montoAbonado: nuevoTotal });
+
+        await Movimientos.create({
+            descripcion: `Pago del cliente ${cliente.nombre}, por la reserva del producto ${producto.nombre}`,
+            operacion: "deposito",
+            monto,
+            UsuarioId: user.id,
+            estado: "finalizada",
+            CajaId: CajaId,
+            ReservaId: reserva.id
+        });
+
+
+
+
+        res.status(200).json(reservaAlmacenada);
     } catch (error) {
         next(error);
     }
