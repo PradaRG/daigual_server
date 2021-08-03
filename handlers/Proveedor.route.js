@@ -10,7 +10,16 @@ router.post('/', async (req, res, next) => {
     try {
         const { codigoInterno, nombre, email, telefono, descripcion } = req.body;
         //TODO: Requiere validacion de datos
-        const createdProvider = await Proveedor.create({ codigoInterno, nombre, email, telefono, descripcion });
+
+        let inputEmail;
+        let inputTelefono;
+        let inputDescripcion;
+
+        (descripcion === '') ? inputDescripcion = null : inputDescripcion = descripcion;
+        (telefono === '') ? inputTelefono = null : inputTelefono = telefono;
+        (email === '') ? inputEmail = null : inputEmail = email;
+
+        const createdProvider = await Proveedor.create({ codigoInterno, nombre, email: inputEmail, telefono: inputTelefono, descripcion: inputDescripcion });
         res.status(201).json(createdProvider);
     } catch (error) {
         next(error);

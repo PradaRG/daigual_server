@@ -8,11 +8,6 @@ const Proveedor = db.define("Proveedor", {
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4(),
   },
-  codigoInterno: {
-    type: DataTypes.STRING(25),
-    allowNull: true,
-    
-  },
   nombre: {
     type: DataTypes.STRING(50),
     allowNull: false,
