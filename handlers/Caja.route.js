@@ -74,7 +74,7 @@ router.post('/abrir-caja', async (req, res, next) => {
 
         let turno;
 
-        const hora = new Date().getHours();
+        const hora = new Date().getUTCHours();
         if (hora >= 0 && hora < 15) {
             turno = "MAÑANA";
         } else {
