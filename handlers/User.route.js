@@ -125,7 +125,7 @@ router.put('/reset-user-password', verifyAccessToken, async (req, res, next) => 
 
     const newUser = await Usuario.findByPk(userId);
 
-    await user.update({ password: 'bigshop' });
+    await newUser.update({ password: 'bigshop' });
 
     res.sendStatus(200);
 
