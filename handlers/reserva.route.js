@@ -1,6 +1,6 @@
 const express = require('express');
 const createError = require('http-errors');
-const Caja = require('../modelos/caja.model');
+const { reducirStock } = require('../helpers/Stock_helper');
 const Cliente = require('../modelos/cliente.model');
 const Movimientos = require('../modelos/movimientos.model');
 const Producto = require('../modelos/productos.model');
@@ -68,7 +68,10 @@ router.put('/', async (req, res, next) => {
         if (nuevoTotal > reservaAlmacenada.monto) throw createError.InternalServerError("El monto supera el valor del producto");
 
         await reservaAlmacenada.update({ montoAbonado: nuevoTotal });
-        if(nuevoTotal === reservaAlmacenada.monto) reservaAlmacenada.update({estado: "entregado"})
+        if (nuevoTotal === reservaAlmacenada.monto) {
+            reservaAlmacenada.update({ estado: "entregado" });
+            reducirStock(reserva.ProductoId, 1, null);
+        }
 
         await Movimientos.create({
             descripcion: `Pago del cliente ${cliente.nombre}, por la reserva del producto ${producto.nombre}`,
@@ -114,6 +117,7 @@ router.put('/entregar', async (req, res, next) => {
         const reservaAEntregar = await Reserva.findByPk(reserva.id);
         if (!reservaAEntregar) throw createError.NotFound('La reserva que busca entregar no existe');
 
+        reducirStock(reserva.ProductoId, 1, null);
         reservaAEntregar.update({
             estado: "entregado"
         });
