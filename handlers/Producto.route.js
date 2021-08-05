@@ -61,8 +61,9 @@ router.get('/productosVendidos', async (req, res, next) => {
         const productosRevisados = [];
         const productosVendidos = [];
 
-        ventas.ItemsVenta.forEach(item => {
-            if (productosRevisados.some(elemento => item.ProductoID === elemento)) return;
+        ventas.forEach(vnt => {
+vtn.ItemsVenta.forEach(item => {
+            if (productosRevisados.some(elemento => item.ProductoId === elemento)) return;
             productosRevisados.push(item.ProductoId);
             const mismoProducto = ventas.ItemsVenta.filter(value => {
                 return value.ProductoId === item.ProductoId;
@@ -84,7 +85,9 @@ router.get('/productosVendidos', async (req, res, next) => {
                 totalVendido
             };
             productosVendidos.push(productoVendido);
-        });
+});
+});
+        
 
         res.status(200).json(productosVendidos);
 
