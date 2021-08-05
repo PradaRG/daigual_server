@@ -163,7 +163,8 @@ router.put('/change-password', verifyAccessToken, async (req, res, next) => {
     const user = await Usuario.findByPk(aud);
     if (!user) createError.NotFound('Usuario no encontrado para el token');
 
-    const isMatch =   bcrypt.compare(password, user.password);
+    const isMatch =   await (bcrypt.compare(password, user.password));
+    console.log(isMatch);
 
     if (!isMatch) throw createError.Unauthorized("Nombre/Contraseña incorrecta");
 
