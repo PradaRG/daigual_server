@@ -11,7 +11,7 @@ const Cliente = db.define("Cliente", {
     type: DataTypes.STRING(50),
     allowNull: false,
   },
-  email: {
+  cuil: {
     type: DataTypes.STRING(50),
     allowNull: true,
   },

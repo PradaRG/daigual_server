@@ -8,9 +8,9 @@ const Cliente = require('../modelos/cliente.model');
 
 router.post('/', async (req, res, next) => {
     try {
-        const { nombre, email, telefono, descripcion } = req.body;
+        const { nombre, cuil, telefono, descripcion } = req.body;
         //TODO: Requiere validacion de datos
-        const createdProvider = await Cliente.create({  nombre, email, telefono, descripcion });
+        const createdProvider = await Cliente.create({  nombre, cuil, telefono, descripcion });
 
         res.status(201).json(createdProvider);
     } catch (error) {
@@ -21,7 +21,7 @@ router.post('/', async (req, res, next) => {
 router.put('/', async (req, res, next) => {
     try {
 
-        const { id,  nombre, email, telefono, descripcion } = req.body;
+        const { id,  nombre, cuil, telefono, descripcion } = req.body;
 
         const prov = await Cliente.findByPk(id);
 
@@ -30,7 +30,7 @@ router.put('/', async (req, res, next) => {
         const updatedUser = await prov.update({
             
             nombre,
-            email,
+            cuil,
             telefono,
             descripcion
         });
