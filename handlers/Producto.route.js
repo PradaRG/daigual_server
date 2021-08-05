@@ -9,6 +9,8 @@ const validate = require('../helpers/jwt_helper');
 const { Op, INTEGER } = require('sequelize');
 const Rubro = require('../modelos/rubros.model');
 const { update } = require('../modelos/proveedor.model');
+const Venta = require('../modelos/venta.model');
+const ItemVenta = require('../modelos/itemVenta.model');
 
 const permisos = {
     master: "MASTER",
@@ -39,6 +41,53 @@ router.get('/operaciones', async (req, res, next) => {
             include: Stock
         });
         res.status(200).json(productos);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.get('/productosVendidos', async (req, res, next) => {
+    try {
+        const ventas = await Venta.findAll({
+            where: {
+                estadoVenta: "finalizada"
+            },
+            include: {
+                model: ItemVenta
+            }
+        });
+
+        const productos = await Producto.findAll();
+        const productosRevisados = [];
+        const productosVendidos = [];
+
+        ventas.ItemsVenta.forEach(item => {
+            if (productosRevisados.some(elemento => item.ProductoID === elemento)) return;
+            productosRevisados.push(item.ProductoId);
+            const mismoProducto = ventas.ItemsVenta.filter(value => {
+                return value.ProductoId === item.ProductoId;
+            });
+            const indice = productos.findIndex(i => i.id === item.ProductoId);
+            if (indice < 0) throw createError.InternalServerError('Producto no encontrado');
+
+            const cantidadVendida = mismoProducto.reduce((total, item) => {
+                return total + item.cantidad;
+            }, 0);
+            const totalVendido = precioVenta * cantidadVendida;
+
+            const productoVendido = {
+                codigoPaquete: productos[indice].codigoPaquete,
+                nombre: productos[indice].nombre,
+                marca: productos[indice].marca,
+                precioVenta: productos[indice].precioVenta,
+                cantidadVendida,
+                totalVendido
+            };
+            productosVendidos.push(productoVendido);
+        });
+
+        res.status(200).json(productosVendidos);
+
     } catch (error) {
         next(error);
     }
@@ -137,7 +186,7 @@ router.put('/rubro', async (req, res, next) => {
         })
         let updatedCount = 0;
         productosPorModificar.forEach(producto => {
-            percent =(porcentajeCantidad / 100);
+            percent = (porcentajeCantidad / 100);
             const valor = producto.precioVenta * percent;
             let nuevoPrecio;
             if (aumentar) {
