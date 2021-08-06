@@ -79,7 +79,7 @@ router.get('/productosVendidos', async (req, res, next) => {
                 const cantidadVendida = mismoProducto.reduce((total, item) => {
                     return total + item.cantidad;
                 }, 0);
-                const totalVendido = precioVenta * cantidadVendida;
+                const totalVendido = productos[indice].precioVenta * cantidadVendida;
 
                 const productoVendido = {
                     codigoPaquete: productos[indice].codigoPaquete,
