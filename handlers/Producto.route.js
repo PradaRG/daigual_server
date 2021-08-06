@@ -57,8 +57,6 @@ router.get('/productosVendidos', async (req, res, next) => {
             }
         });
 
-        console.log('ventas:', ventas);
-
         const productos = await Producto.findAll();
         const productosRevisados = [];
         const productosVendidos = [];
@@ -67,27 +65,29 @@ router.get('/productosVendidos', async (req, res, next) => {
             vnt.ItemsVenta.forEach(item => {
                 if (productosRevisados.some(elemento => item.ProductoId === elemento)) return;
                 productosRevisados.push(item.ProductoId);
-                let mismoProducto;
-                ventas.forEach(sale => { 
-                    filtrados = sale.ItemsVenta.filter(value => { 
+                const mismoProducto = [];
+                ventas.forEach(sale => {
+                    filtrados = sale.ItemsVenta.filter(value => {
                         return value.ProductoId === item.ProductoId;
                     });
-                    mismoProducto = [... mismoProducto, ...filtrados];
+
+                    mismoProducto.push(...filtrados);
+                    console.log("mismo Producto", mismoProducto);
                 })
-                console.log(mismoProducto);
                 const indice = productos.findIndex(i => i.id === item.ProductoId);
                 if (indice < 0) throw createError.InternalServerError('Producto no encontrado');
 
                 const cantidadVendida = mismoProducto.reduce((total, item) => {
                     return total + item.cantidad;
                 }, 0);
-                const totalVendido = productos[indice].precioVenta * cantidadVendida;
+                const totalVendido = mismoProducto.reduce((total, item) => {
+                    return total + (item.cantidad *item.precioVenta );
+                }, 0);
 
                 const productoVendido = {
                     codigoPaquete: productos[indice].codigoPaquete,
                     nombre: productos[indice].nombre,
                     marca: productos[indice].marca,
-                    precioVenta: productos[indice].precioVenta,
                     cantidadVendida,
                     totalVendido,
                     rubro: productos[indice].RubroRubro,

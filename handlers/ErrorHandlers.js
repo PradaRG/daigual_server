@@ -13,7 +13,7 @@ async function errorHandler(err, req, res, next) {
     level: "error",
     errorID: randomErrorId,
     message: err.message,
-    error: err,
+    error: err.stack,
     body: req.body,
     statusCode: err.status,
   });
