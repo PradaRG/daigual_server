@@ -57,37 +57,39 @@ router.get('/productosVendidos', async (req, res, next) => {
             }
         });
 
+        console.log('ventas:', ventas);
+
         const productos = await Producto.findAll();
         const productosRevisados = [];
         const productosVendidos = [];
 
         ventas.forEach(vnt => {
-vtn.ItemsVenta.forEach(item => {
-            if (productosRevisados.some(elemento => item.ProductoId === elemento)) return;
-            productosRevisados.push(item.ProductoId);
-            const mismoProducto = ventas.ItemsVenta.filter(value => {
-                return value.ProductoId === item.ProductoId;
+            vnt.ItemsVenta.forEach(item => {
+                if (productosRevisados.some(elemento => item.ProductoId === elemento)) return;
+                productosRevisados.push(item.ProductoId);
+                const mismoProducto = ventas.ItemsVenta.filter(value => {
+                    return value.ProductoId === item.ProductoId;
+                });
+                const indice = productos.findIndex(i => i.id === item.ProductoId);
+                if (indice < 0) throw createError.InternalServerError('Producto no encontrado');
+
+                const cantidadVendida = mismoProducto.reduce((total, item) => {
+                    return total + item.cantidad;
+                }, 0);
+                const totalVendido = precioVenta * cantidadVendida;
+
+                const productoVendido = {
+                    codigoPaquete: productos[indice].codigoPaquete,
+                    nombre: productos[indice].nombre,
+                    marca: productos[indice].marca,
+                    precioVenta: productos[indice].precioVenta,
+                    cantidadVendida,
+                    totalVendido
+                };
+                productosVendidos.push(productoVendido);
             });
-            const indice = productos.findIndex(i => i.id === item.ProductoId);
-            if (indice < 0) throw createError.InternalServerError('Producto no encontrado');
+        });
 
-            const cantidadVendida = mismoProducto.reduce((total, item) => {
-                return total + item.cantidad;
-            }, 0);
-            const totalVendido = precioVenta * cantidadVendida;
-
-            const productoVendido = {
-                codigoPaquete: productos[indice].codigoPaquete,
-                nombre: productos[indice].nombre,
-                marca: productos[indice].marca,
-                precioVenta: productos[indice].precioVenta,
-                cantidadVendida,
-                totalVendido
-            };
-            productosVendidos.push(productoVendido);
-});
-});
-        
 
         res.status(200).json(productosVendidos);
 
