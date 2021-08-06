@@ -67,9 +67,12 @@ router.get('/productosVendidos', async (req, res, next) => {
             vnt.ItemsVenta.forEach(item => {
                 if (productosRevisados.some(elemento => item.ProductoId === elemento)) return;
                 productosRevisados.push(item.ProductoId);
-                const mismoProducto = ventas.ItemsVenta.filter(value => {
-                    return value.ProductoId === item.ProductoId;
-                });
+                let mismoProducto;
+                ventas.forEach(sale => {
+                    mismoProducto = sale.ItemsVenta.filter(value => {
+                        return value.ProductoId === item.ProductoId;
+                    });
+                })
                 const indice = productos.findIndex(i => i.id === item.ProductoId);
                 if (indice < 0) throw createError.InternalServerError('Producto no encontrado');
 
@@ -84,7 +87,8 @@ router.get('/productosVendidos', async (req, res, next) => {
                     marca: productos[indice].marca,
                     precioVenta: productos[indice].precioVenta,
                     cantidadVendida,
-                    totalVendido
+                    totalVendido,
+                    rubro: productos[indice].RubroId,
                 };
                 productosVendidos.push(productoVendido);
             });
