@@ -33,7 +33,7 @@ const initDB = require("./helpers/Init");
 let origins = ['http://vps-1964821-x.dattaweb.com:3000'];
 if (process.env.NODE_ENV === "dev") {
   origins.push('http://localhost:3000');
-  db.sync({ force: true }).then(() => initDB());
+  // db.sync({ force: true }).then(() => initDB());
 }
 
 // console.log(require('crypto').randomBytes(64).toString('base64'));

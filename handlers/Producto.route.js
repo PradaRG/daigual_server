@@ -74,6 +74,7 @@ router.get('/productosVendidos', async (req, res, next) => {
                     });
                     mismoProducto = [... mismoProducto, ...filtrados];
                 })
+                console.log(mismoProducto);
                 const indice = productos.findIndex(i => i.id === item.ProductoId);
                 if (indice < 0) throw createError.InternalServerError('Producto no encontrado');
 
