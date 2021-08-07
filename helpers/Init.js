@@ -8,12 +8,12 @@ const Usuario = require("../modelos/usuarios.model");
 
 const UsuariosIniciales = [{
     nombre: "patricia",
-    password: "holis",
+    password: "prueba123",
     permisos: "MASTER",
     ventaRapida: 581,
 }, {
     nombre: "juanmanuel",
-    password: "",
+    password: "prueba123",
     permisos: "ADMIN",
     ventaRapida: 409,
 }];
