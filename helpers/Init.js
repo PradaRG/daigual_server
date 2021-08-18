@@ -19,6 +19,7 @@ const UsuariosIniciales = [{
 }];
 
 const ClientesIniciales = [{
+    "id": "adfb21c0-f9df-4251-bd8a-5b43415accfa",
     "nombre": "Consumidor final",
     "email": "sinmail@sinmail.com",
     "telefono": "343-1234565",
