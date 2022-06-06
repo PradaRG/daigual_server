@@ -32,6 +32,7 @@ async function initDB() {
             individualHooks: true
         });
         await Cliente.bulkCreate(ClientesIniciales);
+        console.log('reiniciado');
     } catch (error) {
         console.log(error);
     }

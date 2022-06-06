@@ -81,7 +81,7 @@ router.get('/productosVendidos', async (req, res, next) => {
                     return total + item.cantidad;
                 }, 0);
                 const totalVendido = mismoProducto.reduce((total, item) => {
-                    return total + (item.cantidad *item.precioVenta );
+                    return total + (item.cantidad * item.precioVenta);
                 }, 0);
 
                 const productoVendido = {
@@ -106,14 +106,16 @@ router.get('/productosVendidos', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => { //Crea un producto
     try {
-        const { codigoPaquete, ubicacion, nombre, marca,
-            descripcion, alertaMin, precio, cantidad, precioVenta, ProveedorId, rubro } = req.body;
+        const { codigoPaquete, ubicacion, nombre, marca, descripcion, alertaMin, precio, cantidad, precioVenta, ProveedorId, rubro } = req.body;
 
         const proveedor = await Proveedor.findByPk(ProveedorId);
 
         const productFound = await Producto.findOne({
             where: {
-                codigoPaquete
+                codigoPaquete: {
+                    [Op.ne]: '',
+                    [Op.eq]: codigoPaquete
+                },
             }
         });
 

@@ -69,12 +69,11 @@ router.post('/abrir-caja', async (req, res, next) => {
             }
         });
 
-
         if (cajaAbiertaExiste) throw createError('Ya existe una caja abierta en el sistema');
 
         let turno;
 
-        const hora = new Date().getUTCHours();
+        const hora = new Date().getHours();
         if (hora >= 0 && hora < 15) {
             turno = "MAÑANA";
         } else {
@@ -117,9 +116,11 @@ router.post('/abrir-caja', async (req, res, next) => {
 router.put('/cerrar-caja', async (req, res, next) => {
     try {
         const { id, montoEfectivoFinal } = req.body;
+        
         const caja = await Caja.findByPk(id);
 
         if (!caja) throw createError('No se encuentra la caja sobre la que desea operar');
+        
         await caja.update({
             estado: "CERRADA",
             montoEfectivoFinal
